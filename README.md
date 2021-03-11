@@ -1,39 +1,80 @@
-# powermgr_powermgr_lite
+# Lite Power Manager<a name="EN-US_TOPIC_0000001126247025"></a>
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+-   [Introduction](#section11660541593)
+-   [Directory Structure](#section19472752217)
+-   [Usage](#section146636391856)
+    -   [Available APIs](#section481251394)
+    -   [Usage Guidelines](#section12620311012)
 
-#### 软件架构
-软件架构说明
+-   [Repositories Involved](#section63151229062)
 
+## Introduction<a name="section11660541593"></a>
 
-#### 安装教程
+The lite power manager provides the following capabilities:
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  Querying the battery level
+2.  Keeping the device screen always on using a lock
 
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+**Figure  1**  Lite power manager architecture<a name="fig106301571239"></a>
 
 
-#### 特技
+![](figures/en-us_image_0000001079710638.png)
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+## Directory Structure<a name="section19472752217"></a>
+
+```
+base/powermgr/powermgr_lite
+├── interfaces		# APIs
+│   └── kits
+│       └── battery		# API for querying the battery level
+└── services		        # Services
+    ├── include
+    └── source
+```
+
+## Usage<a name="section146636391856"></a>
+
+### Available APIs<a name="section481251394"></a>
+
+The following table lists the JavaScript APIs provided by the lite power manager.
+
+<a name="table45171237103112"></a>
+<table><thead align="left"><tr id="row12572123793117"><th class="cellrowborder" valign="top" width="38.71%" id="mcps1.1.3.1.1"><p id="p19572937163116"><a name="p19572937163116"></a><a name="p19572937163116"></a><strong id="b98969616388"><a name="b98969616388"></a><a name="b98969616388"></a>API</strong></p>
+</th>
+<th class="cellrowborder" valign="top" width="61.29%" id="mcps1.1.3.1.2"><p id="p157213711313"><a name="p157213711313"></a><a name="p157213711313"></a><strong id="b17930187133810"><a name="b17930187133810"></a><a name="b17930187133810"></a>Description</strong></p>
+</th>
+</tr>
+</thead>
+<tbody><tr id="row14574143723119"><td class="cellrowborder" valign="top" width="38.71%" headers="mcps1.1.3.1.1 "><p id="p67351028124111"><a name="p67351028124111"></a><a name="p67351028124111"></a>battery.getStatus(OBJECT)</p>
+</td>
+<td class="cellrowborder" valign="top" width="61.29%" headers="mcps1.1.3.1.2 "><p id="p105741337153115"><a name="p105741337153115"></a><a name="p105741337153115"></a>Obtains the battery level.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+### Usage Guidelines<a name="section12620311012"></a>
+
+**Obtaining the battery level**
+
+Use the JavaScript API to obtain the battery level.
+
+The sample code is as follows:
+
+```
+battery.getStatus({
+  success: function(data) {
+    console.log('success get battery level:' + data.level);
+  },
+  fail: function(data, code) {
+    console.log('fail to get battery level code:' + code + ', data: ' + data);
+  },
+});
+```
+
+## Repositories Involved<a name="section63151229062"></a>
+
+Power management subsystem
+
+**hmf/powermgr/powermgr\_lite**
+
