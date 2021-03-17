@@ -26,8 +26,8 @@ The power manager provides the following capabilities:
 base/powermgr/powermgr_lite
 ├── interfaces		# APIs
 │   └── kits
-│       └── battery		# API for querying the battery level
-└── services		        # Services
+│       └── battery	# API for querying the battery level
+└── services		# Services
     ├── include
     └── source
 ```
