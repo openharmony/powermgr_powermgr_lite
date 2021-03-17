@@ -26,8 +26,8 @@
 base/powermgr/powermgr_lite
 ├── interfaces			# 电源管理组件接口层
 │   └── kits
-│       └── battery		# 电池查询接口
-└── services		        # 电源管理组件服务
+│       └── battery			# 电池查询接口
+└── services			# 电源管理组件服务
     ├── include
     └── source
 ```
