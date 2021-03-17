@@ -1,4 +1,4 @@
-# Lite Power Manager<a name="EN-US_TOPIC_0000001126247025"></a>
+# Power Manager<a name="EN-US_TOPIC_0000001126247025"></a>
 
 -   [Introduction](#section11660541593)
 -   [Directory Structure](#section19472752217)
@@ -10,12 +10,12 @@
 
 ## Introduction<a name="section11660541593"></a>
 
-The lite power manager provides the following capabilities:
+The power manager provides the following capabilities:
 
 1.  Querying the battery level
 2.  Keeping the device screen always on using a lock
 
-**Figure  1**  Lite power manager architecture<a name="fig106301571239"></a>
+**Figure  1**  Power manager architecture<a name="fig106301571239"></a>
 
 
 ![](figures/en-us_image_0000001079710638.png)
@@ -36,7 +36,7 @@ base/powermgr/powermgr_lite
 
 ### Available APIs<a name="section481251394"></a>
 
-The following table lists the JavaScript APIs provided by the lite power manager.
+The following table lists the JavaScript APIs provided by the power manager.
 
 <a name="table45171237103112"></a>
 <table><thead align="left"><tr id="row12572123793117"><th class="cellrowborder" valign="top" width="38.71%" id="mcps1.1.3.1.1"><p id="p19572937163116"><a name="p19572937163116"></a><a name="p19572937163116"></a><strong id="b98969616388"><a name="b98969616388"></a><a name="b98969616388"></a>API</strong></p>
@@ -74,7 +74,7 @@ battery.getStatus({
 
 ## Repositories Involved<a name="section63151229062"></a>
 
-Power management subsystem
+[Power management subsystem](https://gitee.com/openharmony/docs/blob/master/en/readme/power-management.md)
 
-**hmf/powermgr/powermgr\_lite**
+ **powermgr_powermgr_lite** 
 
