@@ -1,4 +1,4 @@
-# 轻量级电源管理组件<a name="ZH-CN_TOPIC_0000001126247025"></a>
+# 电源管理组件<a name="ZH-CN_TOPIC_0000001126247025"></a>
 
 -   [简介](#section11660541593)
 -   [目录](#section19472752217)
@@ -10,12 +10,12 @@
 
 ## 简介<a name="section11660541593"></a>
 
-轻量级电源组件提供如下功能：
+电源管理组件提供如下功能：
 
 1.  电池电量查询。
 2.  亮灭屏控制锁。
 
-**图 1**  轻量级电源管理组件架构图<a name="fig106301571239"></a>
+**图 1**  电源管理组件架构图<a name="fig106301571239"></a>
 
 
 ![](figures/en-us_image_0000001079710638.png)
@@ -24,10 +24,10 @@
 
 ```
 base/powermgr/powermgr_lite
-├── interfaces		# 轻量级电源管理组件接口层
+├── interfaces			# 电源管理组件接口层
 │   └── kits
 │       └── battery		# 电池查询接口
-└── services		        # 电源管理组件服务
+└── services			# 电源管理组件服务
     ├── include
     └── source
 ```
@@ -36,7 +36,7 @@ base/powermgr/powermgr_lite
 
 ### 接口说明<a name="section481251394"></a>
 
-轻量电源管理服务对外提供的JS接口，如下表：
+电源管理服务对外提供的JS接口，如下表：
 
 <a name="table45171237103112"></a>
 <table><thead align="left"><tr id="row12572123793117"><th class="cellrowborder" valign="top" width="38.71%" id="mcps1.1.3.1.1"><p id="p19572937163116"><a name="p19572937163116"></a><a name="p19572937163116"></a><strong id="b18552135014316"><a name="b18552135014316"></a><a name="b18552135014316"></a>接口名</strong></p>
@@ -75,7 +75,7 @@ battery.getStatus({
 
 ## 相关仓<a name="section63151229062"></a>
 
-电源管理子系统
+[电源管理子系统](https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/%E7%94%B5%E6%BA%90%E7%AE%A1%E7%90%86%E5%AD%90%E7%B3%BB%E7%BB%9F.md)
 
-**hmf/powermgr/powermgr\_lite**
+ **powermgr_powermgr_lite** 
 
