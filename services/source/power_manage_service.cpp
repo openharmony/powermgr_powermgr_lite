@@ -37,7 +37,7 @@ static void GInit()
     if (sm == nullptr) {
         return;
     }
-    BOOL result = sm->RegisterService(PowerMgrService::GetInstance());
+    sm->RegisterService(PowerMgrService::GetInstance());
 }
 SYSEX_SERVICE_INIT(GInit);
 
