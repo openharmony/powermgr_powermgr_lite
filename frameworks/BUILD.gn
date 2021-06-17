@@ -16,7 +16,6 @@ import("//build/lite/config/component/lite_component.gni")
 
 local_include_dirs = []
 local_deps = []
-local_sources = []
 
 if (is_mini_system) {
   local_include_dirs += [
@@ -25,37 +24,40 @@ if (is_mini_system) {
     "//kernel/liteos_m/kal/posix/include",
   ]
 } else {
-  local_deps +=
-      [ "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared" ]
-
-  if (enable_screensaver) {
-    local_sources += [ "src/screen_saver_feature.c" ]
-    local_deps += [ "src/${system_type}:screensaver_featrue_impl" ]
-  }
+  local_deps += [
+    "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
+    "//third_party/bounds_checking_function:libsec_shared",
+  ]
 }
 
-lite_library("powermgrservice") {
+config("powermgr_public_config") {
+  include_dirs = [
+    "${powermgr_innerkits_path}",
+    "${powermgr_kits_path}",
+  ]
+}
+
+lite_library("powermgr") {
   target_type = lite_library_type
 
-  sources = [
-    "src/power_manage_service.c",
-    "src/running_lock_feature.c",
-    "src/running_lock_mgr.c",
-  ]
-  sources += local_sources
+  sources = [ "src/running_lock.c" ]
 
   include_dirs = [
     "include",
-    "${powermgr_frameworks_path}/include",
-    "${powermgr_frameworks_path}/include/${system_type}",
-    "${powermgr_kits_path}",
+    "include/${system_type}",
     "//utils/native/lite/include",
   ]
   include_dirs += local_include_dirs
 
+  public_configs = [ ":powermgr_public_config" ]
+
   deps = [
-    "src/${system_type}:runninglock_featrue_impl",
+    "src/${system_type}:runninglock_impl",
     "//foundation/distributedschedule/samgr_lite/samgr:samgr",
   ]
   deps += local_deps
+
+  if (enable_screensaver) {
+    deps += [ "src/${system_type}:screensaver_impl" ]
+  }
 }

@@ -10,8 +10,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-declare_args() {
-  enable_screensaver = false
+import("//build/lite/config/component/lite_component.gni")
+
+lite_component("powermgr_lite") {
+  features = [
+    "frameworks:powermgr",
+    "services:powermgrservice",
+  ]
 }
