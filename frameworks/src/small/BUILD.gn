@@ -15,6 +15,9 @@ import("//base/powermgr/powermgr_lite/powermgr.gni")
 import("//build/lite/config/component/lite_component.gni")
 
 source_set("runninglock_impl") {
+  cflags = [ "-fPIC" ]
+  cflags_cc = cflags
+
   sources = [ "running_lock_inner.c" ]
 
   include_dirs = [
@@ -27,6 +30,9 @@ source_set("runninglock_impl") {
 }
 
 source_set("screensaver_impl") {
+  cflags = [ "-fPIC" ]
+  cflags_cc = cflags
+
   sources = [ "power_screen_saver.c" ]
 
   include_dirs = [
