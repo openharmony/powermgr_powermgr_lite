@@ -13,14 +13,55 @@
  * limitations under the License.
  */
 
+#include <stdint.h>
+
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "hilog_wrapper.h"
+
+static int32_t WriteLock(int32_t fd, const char *name)
+{
+    if (name == NULL) {
+        POWER_HILOGE("Invalid lock name");
+        return -1;
+    }
+    int32_t ret = write(fd, name, strlen(name));
+    if (ret < 0) {
+        POWER_HILOGE("Failed to write lock: %s, error: %s", name, strerror(errno));
+        return -1;
+    }
+    return 0;
+}
 
 void RunningLockHandlerLock(const char *name)
 {
-    POWER_HILOGD("To be locked in kernel, name: %s", name);
+    static int32_t fd = -1;
+
+    if (fd < 0) {
+        fd = open("/proc/power/power_lock", O_RDWR);
+        if (fd < 0) {
+            POWER_HILOGE("Failed to open power_lock: %s", strerror(errno));
+            return;
+        }
+    }
+    int32_t ret = WriteLock(fd, name);
+    POWER_HILOGI("Write %s to power_lock, ret: %d", name, ret);
 }
 
 void RunningLockHandlerUnlock(const char *name)
 {
-    POWER_HILOGD("To be unlocked in kernel, name: %s", name);
+    static int32_t fd = -1;
+
+    if (fd < 0) {
+        fd = open("/proc/power/power_unlock", O_RDWR);
+        if (fd < 0) {
+            POWER_HILOGE("Failed to open power_unlock: %s", strerror(errno));
+            return;
+        }
+    }
+    int32_t ret = WriteLock(fd, name);
+    POWER_HILOGI("Write %s to power_unlock, ret: %d", name, ret);
 }

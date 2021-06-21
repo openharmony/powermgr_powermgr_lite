@@ -169,9 +169,7 @@ void ScreenSaverHandler::OnRawEvent(const RawEvent &event)
 {
     static int64_t lastUpdateTime = 0;
     std::lock_guard<std::mutex> lock(mutex_);
-    POWER_HILOGI("User activity refreshed, restart the timer");
     screenSaverStarted_ = false;
-
     int64_t currentTime = GetCurrentTimeMsec(CLOCK_MONOTONIC);
     if ((currentTime - lastUpdateTime) > MSEC_PER_SEC) {
         PowerMgrRestartTimer(timer_, (void *)this);
