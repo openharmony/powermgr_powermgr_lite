@@ -91,11 +91,11 @@ static BOOL RemoveRunningLockEntryLocked(Vector *vec, RunningLockEntry *entry)
 static void ShowLocks()
 {
 #ifdef OHOS_DEBUG
-    for (int t = RUNNINGLOCK_SCREEN; t < RUNNINGLOCK_BUTT; t++) {
+    for (int32_t t = RUNNINGLOCK_SCREEN; t < RUNNINGLOCK_BUTT; t++) {
         Vector *vec = &g_runningLocks[t];
-        int size = VECTOR_Size(vec);
+        int32_t size = VECTOR_Size(vec);
         POWER_HILOGD("type: %d, lock num: %d", t, VECTOR_Num(vec));
-        for (int i = 0; i < size; i++) {
+        for (int32_t i = 0; i < size; i++) {
             RunningLockEntry* e = VECTOR_At(vec, i);
             if (e != NULL) {
                 POWER_HILOGD("No.%d, name: %s, pid: %u, token: %llu",
@@ -135,14 +135,26 @@ int32_t RunningLockMgrReleaseEntry(RunningLockEntry *entry)
     return (ret == TRUE) ? EC_SUCCESS : EC_FAILURE;
 }
 
-int32_t RunningLockMgrGetLockCount(RunningLockType type)
+uint32_t RunningLockMgrGetLockCount(RunningLockType type)
 {
-    int32_t cnt = -1;
+    uint32_t cnt = 0;
     if ((type >= 0) && (type < RUNNINGLOCK_BUTT)) {
         pthread_mutex_lock(&g_mutex);
         cnt = VECTOR_Num(&g_runningLocks[type]);
         pthread_mutex_unlock(&g_mutex);
     }
+    return cnt;
+}
+
+uint32_t RunningLockMgrGetTotalLockCount()
+{
+    uint32_t cnt = 0;
+    pthread_mutex_lock(&g_mutex);
+    for (int32_t t = RUNNINGLOCK_SCREEN; t < RUNNINGLOCK_BUTT; t++) {
+        cnt += VECTOR_Num(&g_runningLocks[t]);
+    }
+    pthread_mutex_unlock(&g_mutex);
+    POWER_HILOGD("Total lock count: %u", cnt);
     return cnt;
 }
 

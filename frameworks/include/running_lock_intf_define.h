@@ -27,8 +27,9 @@ extern "C" {
 #define POWER_RUNNING_LOCK_FEATURE        "runninglock"
 
 #define INHERIT_RUNNINGLOCK_INTERFACE                                                                           \
-    int32_t (*AcquireRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry, int32_t timeoutMs);    \
-    int32_t (*ReleaseRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry)
+    int32_t (*AcquireRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry, int32_t timeoutMs);     \
+    int32_t (*ReleaseRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry);                        \
+    BOOL (*IsAnyRunningLockHoldingFunc)(IUnknown *iUnknown)
 
 #ifdef __cplusplus
 }

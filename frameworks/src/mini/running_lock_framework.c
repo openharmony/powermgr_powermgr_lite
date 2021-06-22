@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "running_lock_inner.h"
+#include "running_lock_framework.h"
 
 #include <stdint.h>
 
@@ -79,4 +79,14 @@ BOOL ReleaseRunningLockEntry(RunningLockEntry *entry)
         ret = intf->ReleaseRunningLockEntryFunc((IUnknown *)intf, entry);
     }
     return (ret == EC_SUCCESS) ? TRUE : FALSE;
+}
+
+BOOL IsAnyRunningLockHolding()
+{
+    BOOL ret = FALSE;
+    RunningLockInterface *intf = GetRunningLockInterface();
+    if ((intf != NULL) && (intf->IsAnyRunningLockHoldingFunc != NULL)) {
+        ret = intf->IsAnyRunningLockHoldingFunc((IUnknown *)intf);
+    }
+    return ret;
 }

@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_INNER_H
-#define POWERMGR_RUNNING_LOCK_INNER_H
+#ifndef POWERMGR_RUNNING_LOCK_FRAMEWORK_H
+#define POWERMGR_RUNNING_LOCK_FRAMEWORK_H
 
 #include <iunknown.h>
 #include <samgr_lite.h>
@@ -39,4 +39,4 @@ BOOL ReleaseRunningLockEntry(RunningLockEntry *entry);
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_INNER_H
+#endif // POWERMGR_RUNNING_LOCK_FRAMEWORK_H
