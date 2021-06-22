@@ -33,7 +33,7 @@ static inline BOOL RunningLockMgrIsLockHolding(RunningLockType type)
     return (RunningLockMgrGetLockCount(type) > 0) ? TRUE : FALSE;
 }
 
-BOOL RunningLockMgrIsAnyLockHolding()
+static inline BOOL RunningLockMgrIsAnyLockHolding()
 {
     return (RunningLockMgrGetTotalLockCount() > 0) ? TRUE : FALSE;
 }

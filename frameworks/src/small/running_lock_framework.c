@@ -60,7 +60,7 @@ static void *CreatClient(const char *service, const char *feature, uint32_t size
     entry->iUnknown.Invoke = NULL;
     entry->iUnknown.AcquireRunningLockEntryFunc = AcquireRunningLockEntryProxy;
     entry->iUnknown.ReleaseRunningLockEntryFunc = ReleaseRunningLockEntryProxy;
-    entry->IsAnyRunningLockHoldingFunc = IsAnyRunningLockHoldingProxy;
+    entry->iUnknown.IsAnyRunningLockHoldingFunc = IsAnyRunningLockHoldingProxy;
     return client;
 }
 
@@ -167,7 +167,7 @@ static int32_t IsAnyHoldingCallback(IOwner owner, int32_t code, IpcIo *reply)
     return EC_SUCCESS;
 }
 
-static int32_t IsAnyRunningLockHoldingProxy(IUnknown *iUnknown)
+static BOOL IsAnyRunningLockHoldingProxy(IUnknown *iUnknown)
 {
     BOOL ret;
     RunningLockProxyInterface *proxy = (RunningLockProxyInterface *)iUnknown;

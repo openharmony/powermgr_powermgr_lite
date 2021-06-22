@@ -81,6 +81,6 @@ static int32_t ReleaseInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, Ipc
 static int32_t IsAnyHoldingInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
 {
     BOOL ret = OnIsAnyRunningLockHolding((IUnknown *)iProxy);
-    IpcIoPushBool(reply, ret == TURE);
+    IpcIoPushBool(reply, ret == TRUE);
     return EC_SUCCESS;
 }
