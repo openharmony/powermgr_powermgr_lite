@@ -13,32 +13,20 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_MGR_H
-#define POWERMGR_RUNNING_LOCK_MGR_H
+#ifndef POWERMGR_RUNNING_LOCK_INNER_H
+#define POWERMGR_RUNNING_LOCK_INNER_H
 
-#include "running_lock_entry.h"
+#include <ohos_types.h>
+
+#include <running_lock.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void RunningLockMgrInit(void);
-int32_t RunningLockMgrAcquireEntry(RunningLockEntry *entry, int32_t timeoutMs);
-int32_t RunningLockMgrReleaseEntry(RunningLockEntry *entry);
-uint32_t RunningLockMgrGetLockCount(RunningLockType type);
-uint32_t RunningLockMgrGetTotalLockCount();
-
-static inline BOOL RunningLockMgrIsLockHolding(RunningLockType type)
-{
-    return (RunningLockMgrGetLockCount(type) > 0) ? TRUE : FALSE;
-}
-
-static inline BOOL RunningLockMgrIsAnyLockHolding()
-{
-    return (RunningLockMgrGetTotalLockCount() > 0) ? TRUE : FALSE;
-}
+BOOL IsAnyRunningLockHolding();
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_MGR_H
+#endif // POWERMGR_RUNNING_LOCK_INNER_H

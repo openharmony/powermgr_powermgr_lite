@@ -25,7 +25,7 @@
 
 #include "hilog_wrapper.h"
 #include "running_lock_entry.h"
-#include "running_lock_inner.h"
+#include "running_lock_framework.h"
 
 static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 static BOOL g_inited = FALSE;
