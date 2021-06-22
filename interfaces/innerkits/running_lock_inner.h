@@ -13,25 +13,20 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_INTF_DEFINE_H
-#define POWERMGR_RUNNING_LOCK_INTF_DEFINE_H
+#ifndef POWERMGR_RUNNING_LOCK_INNER_H
+#define POWERMGR_RUNNING_LOCK_INNER_H
 
-#include <iunknown.h>
+#include <ohos_types.h>
 
-#include "running_lock_entry.h"
+#include <running_lock.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-#define POWER_RUNNING_LOCK_FEATURE        "runninglock"
-
-#define INHERIT_RUNNINGLOCK_INTERFACE                                                                           \
-    int32_t (*AcquireRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry, int32_t timeoutMs);     \
-    int32_t (*ReleaseRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry);                        \
-    BOOL (*IsAnyRunningLockHoldingFunc)(IUnknown *iUnknown)
+BOOL IsAnyRunningLockHolding();
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_INTF_DEFINE_H
+#endif // POWERMGR_RUNNING_LOCK_INNER_H

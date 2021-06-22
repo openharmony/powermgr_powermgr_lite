@@ -33,6 +33,7 @@ void OnRunningLockFeatureStop(Feature *feature, Identity identity);
 BOOL OnRunningLockFeatureMessage(Feature *feature, Request *request);
 int32_t OnAcquireRunningLockEntry(IUnknown *iUnknown, RunningLockEntry *entry, int32_t timeoutMs);
 int32_t OnReleaseRunningLockEntry(IUnknown *iUnknown, RunningLockEntry *entry);
+BOOL OnIsAnyRunningLockHolding(IUnknown *iUnknown);
 
 #define RUNNING_LOCK_FEATURE_INTERFACE_IMPL                         \
     .GetName = GetRunningLockFeatureName,                                      \
@@ -42,7 +43,8 @@ int32_t OnReleaseRunningLockEntry(IUnknown *iUnknown, RunningLockEntry *entry);
 
 #define RUNNING_LOCK_INTERFACE_IMPL                                 \
     .AcquireRunningLockEntryFunc = OnAcquireRunningLockEntry,       \
-    .ReleaseRunningLockEntryFunc = OnReleaseRunningLockEntry
+    .ReleaseRunningLockEntryFunc = OnReleaseRunningLockEntry,       \
+    .IsAnyRunningLockHoldingFunc = OnIsAnyRunningLockHolding
 
 RunningLockFeature *GetRunningLockFeatureImpl(void);
 

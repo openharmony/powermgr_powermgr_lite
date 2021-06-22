@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "running_lock_inner.h"
+#include "running_lock_framework.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -38,6 +38,7 @@ static RunningLockProxyInterface *g_intf = NULL;
 
 static int32_t AcquireRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry *entry, int32_t timeoutMs);
 static int32_t ReleaseRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry *entry);
+static BOOL IsAnyRunningLockHoldingProxy(IUnknown *iUnknown);
 
 static void *CreatClient(const char *service, const char *feature, uint32_t size)
 {
@@ -59,6 +60,7 @@ static void *CreatClient(const char *service, const char *feature, uint32_t size
     entry->iUnknown.Invoke = NULL;
     entry->iUnknown.AcquireRunningLockEntryFunc = AcquireRunningLockEntryProxy;
     entry->iUnknown.ReleaseRunningLockEntryFunc = ReleaseRunningLockEntryProxy;
+    entry->IsAnyRunningLockHoldingFunc = IsAnyRunningLockHoldingProxy;
     return client;
 }
 
@@ -98,7 +100,7 @@ static RunningLockProxyInterface *GetRunningLockProxyInterface(void)
     return g_intf;
 }
 
-static int32_t Callback(IOwner owner, int32_t code, IpcIo *reply)
+static int32_t AcquireReleaseCallback(IOwner owner, int32_t code, IpcIo *reply)
 {
     if ((reply == NULL) || (owner == NULL)) {
         POWER_HILOGE("Invalid parameter");
@@ -126,7 +128,7 @@ static int32_t AcquireRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry
 
     int32_t ret;
     RunningLockProxyInterface *proxy = (RunningLockProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_ACQUIRE, &request, &ret, Callback);
+    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_ACQUIRE, &request, &ret, AcquireReleaseCallback);
     POWER_HILOGD("Acquire running lock done, name: %s, type: %d", entry->lock.name, entry->lock.type);
 
     return ret;
@@ -146,9 +148,30 @@ static int32_t ReleaseRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry
 
     int32_t ret;
     RunningLockProxyInterface *proxy = (RunningLockProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_RELEASE, &request, &ret, Callback);
+    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_RELEASE, &request, &ret, AcquireReleaseCallback);
     POWER_HILOGD("Release running lock done, name: %s, type: %d", entry->lock.name, entry->lock.type);
 
+    return ret;
+}
+
+static int32_t IsAnyHoldingCallback(IOwner owner, int32_t code, IpcIo *reply)
+{
+    if ((reply == NULL) || (owner == NULL)) {
+        POWER_HILOGE("Invalid parameter");
+        return EC_INVALID;
+    }
+
+    BOOL *ret = (BOOL *)owner;
+    *ret = IpcIoPopBool(reply) ? TRUE : FALSE;
+    POWER_HILOGD("Any running lock holding: %d, code: %d", *ret, code);
+    return EC_SUCCESS;
+}
+
+static int32_t IsAnyRunningLockHoldingProxy(IUnknown *iUnknown)
+{
+    BOOL ret;
+    RunningLockProxyInterface *proxy = (RunningLockProxyInterface *)iUnknown;
+    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_ISANYHOLDING, NULL, &ret, IsAnyHoldingCallback);
     return ret;
 }
 
@@ -179,4 +202,14 @@ BOOL ReleaseRunningLockEntry(RunningLockEntry *entry)
         ret = intf->ReleaseRunningLockEntryFunc((IUnknown *)intf, entry);
     }
     return (ret == EC_SUCCESS) ? TRUE : FALSE;
+}
+
+BOOL IsAnyRunningLockHolding()
+{
+    BOOL ret = FALSE;
+    RunningLockProxyInterface *intf = GetRunningLockProxyInterface();
+    if ((intf != NULL) && (intf->IsAnyRunningLockHoldingFunc != NULL)) {
+        ret = intf->IsAnyRunningLockHoldingFunc((IUnknown *)intf);
+    }
+    return ret;
 }

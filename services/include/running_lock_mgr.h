@@ -25,11 +25,17 @@ extern "C" {
 void RunningLockMgrInit(void);
 int32_t RunningLockMgrAcquireEntry(RunningLockEntry *entry, int32_t timeoutMs);
 int32_t RunningLockMgrReleaseEntry(RunningLockEntry *entry);
-int32_t RunningLockMgrGetLockCount(RunningLockType type);
+uint32_t RunningLockMgrGetLockCount(RunningLockType type);
+uint32_t RunningLockMgrGetTotalLockCount();
 
 static inline BOOL RunningLockMgrIsLockHolding(RunningLockType type)
 {
-    return (RunningLockMgrGetLockCount(type) != 0) ? TRUE : FALSE;
+    return (RunningLockMgrGetLockCount(type) > 0) ? TRUE : FALSE;
+}
+
+BOOL RunningLockMgrIsAnyLockHolding()
+{
+    return (RunningLockMgrGetTotalLockCount() > 0) ? TRUE : FALSE;
 }
 
 #ifdef __cplusplus

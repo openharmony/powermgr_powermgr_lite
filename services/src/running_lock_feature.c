@@ -21,7 +21,7 @@
 
 #include "hilog_wrapper.h"
 #include "power_mgr.h"
-#include "running_lock_inner.h"
+#include "running_lock_framework.h"
 #include "running_lock_mgr.h"
 
 const char *GetRunningLockFeatureName(Feature *feature)
@@ -69,6 +69,12 @@ int32_t OnReleaseRunningLockEntry(IUnknown *iUnknown, RunningLockEntry *entry)
 {
     (void)iUnknown;
     return RunningLockMgrReleaseEntry(entry);
+}
+
+BOOL OnIsAnyRunningLockHolding(IUnknown *iUnknown)
+{
+    (void)iUnknown;
+    return RunningLockMgrIsAnyLockHolding();
 }
 
 static void Init(void)

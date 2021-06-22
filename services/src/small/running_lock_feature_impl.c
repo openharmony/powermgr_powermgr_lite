@@ -25,6 +25,7 @@
 typedef int32_t (*InvokeFunc)(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
 static int32_t AcquireInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
 static int32_t ReleaseInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
+static int32_t IsAnyHoldingInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
 static int32_t FeatureInvoke(IServerProxy *iProxy, int32_t funcId, void *origin, IpcIo *req, IpcIo *reply);
 
 static RunningLockFeature g_feature = {
@@ -39,6 +40,7 @@ static RunningLockFeature g_feature = {
 static InvokeFunc g_invokeFuncs[RUNNINGLOCK_FUNCID_BUTT] = {
     AcquireInvoke,
     ReleaseInvoke,
+    IsAnyHoldingInvoke,
 };
 
 RunningLockFeature *GetRunningLockFeatureImpl(void)
@@ -73,5 +75,12 @@ static int32_t ReleaseInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, Ipc
     void *data = (void *)IpcIoPopFlatObj(req, &len);
     int32_t ret = OnReleaseRunningLockEntry((IUnknown *)iProxy, (RunningLockEntry *)data);
     IpcIoPushInt32(reply, ret);
+    return EC_SUCCESS;
+}
+
+static int32_t IsAnyHoldingInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
+{
+    BOOL ret = OnIsAnyRunningLockHolding((IUnknown *)iProxy);
+    IpcIoPushBool(reply, ret == TURE);
     return EC_SUCCESS;
 }

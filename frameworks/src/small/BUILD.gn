@@ -18,7 +18,7 @@ source_set("runninglock_impl") {
   cflags = [ "-fPIC" ]
   cflags_cc = cflags
 
-  sources = [ "running_lock_inner.c" ]
+  sources = [ "running_lock_framework.c" ]
 
   include_dirs = [
     "${powermgr_frameworks_path}/include",
