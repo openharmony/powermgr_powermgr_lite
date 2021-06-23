@@ -26,6 +26,7 @@ static_library("runninglock_featrue_impl") {
     "${powermgr_services_path}/include",
     "${powermgr_kits_path}",
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
+    "//kernel/liteos_m/components/power",
     "//kernel/liteos_m/kernel/include",
     "//kernel/liteos_m/utils",
   ]
