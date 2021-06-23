@@ -21,8 +21,8 @@ if (is_mini_system) {
   local_include_dirs += [
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
     "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
-    "//kernel/liteos_m/kal/posix/include",
   ]
+  local_deps += [ "//kernel/liteos_m/kal/posix:posix" ]
 } else {
   local_deps += [
     "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
