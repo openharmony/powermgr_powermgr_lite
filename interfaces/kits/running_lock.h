@@ -61,6 +61,7 @@ const RunningLock *CreateRunningLock(const char *name, RunningLockType type, Run
 void DestroyRunningLock(const RunningLock *lock);
 BOOL AcquireRunningLock(const RunningLock *lock);
 BOOL ReleaseRunningLock(const RunningLock *lock);
+BOOL IsRunningLockHolding(const RunningLock *lock);
 
 #ifdef __cplusplus
 }

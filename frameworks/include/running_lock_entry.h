@@ -30,8 +30,13 @@ typedef struct {
 } RunningLockIdentity;
 
 typedef struct {
+    BOOL isHolding;
+} RunningLockStatus;
+
+typedef struct {
     RunningLock lock;
     RunningLockIdentity identity;
+    RunningLockStatus status;
 } RunningLockEntry;
 
 static inline RunningLockEntry *GetRunningLockEntry(const RunningLock *lock)
