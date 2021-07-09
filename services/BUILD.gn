@@ -30,7 +30,7 @@ if (is_mini_system) {
 
   if (enable_screensaver) {
     local_sources += [ "src/screen_saver_feature.c" ]
-    local_deps += [ "src/${system_type}:screensaver_featrue_impl" ]
+    local_deps += [ "src/screensaver/${system_type}:screensaver_featrue_impl" ]
   }
 }
 
@@ -54,7 +54,7 @@ lite_library("powermgrservice") {
   include_dirs += local_include_dirs
 
   deps = [
-    "src/${system_type}:runninglock_featrue_impl",
+    "src/runninglock/${system_type}:runninglock_featrue_impl",
     "//foundation/distributedschedule/samgr_lite/samgr:samgr",
   ]
   deps += local_deps
