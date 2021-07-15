@@ -18,7 +18,7 @@
 **图 1**  轻量级电源管理组件架构图<a name="fig106301571239"></a>  
 
 
-![](figures/image_0000001126842480.png)
+![](figures/en-us_image_0000001079710638.png)
 
 ## 目录<a name="section19472752217"></a>
 

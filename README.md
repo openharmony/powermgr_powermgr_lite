@@ -18,7 +18,7 @@ The lite power manager provides the following capabilities:
 **Figure  1**  Lite power manager architecture<a name="fig106301571239"></a>  
 
 
-![](figures/image_0000001126842480.png)
+![](figures/en-us_image_0000001079710638.png)
 
 ## Directory Structure<a name="section19472752217"></a>
 
