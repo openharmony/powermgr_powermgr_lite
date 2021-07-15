@@ -105,5 +105,5 @@ DestroyRunningLock(lock); // Must release runninglock before destroyed
 
 [电源管理子系统](https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/%E7%94%B5%E6%BA%90%E7%AE%A1%E7%90%86%E5%AD%90%E7%B3%BB%E7%BB%9F.md)
 
-**hmf/powermgr/powermgr\_lite**
+ **powermgr_powermgr_lite** 
 
