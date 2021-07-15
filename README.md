@@ -98,7 +98,7 @@ DestroyRunningLock(lock); // Must release runninglock before destroyed
 
 ## Repositories Involved<a name="section63151229062"></a>
 
-Power management subsystem
+[Power management subsystem](https://gitee.com/openharmony/docs/blob/master/en/readme/power-management.md)
 
 **hmf/powermgr/powermgr\_lite**
 
