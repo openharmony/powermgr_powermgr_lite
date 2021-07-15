@@ -100,5 +100,5 @@ DestroyRunningLock(lock); // Must release runninglock before destroyed
 
 [Power management subsystem](https://gitee.com/openharmony/docs/blob/master/en/readme/power-management.md)
 
-**hmf/powermgr/powermgr\_lite**
+**powermgr_powermgr_lite** 
 
