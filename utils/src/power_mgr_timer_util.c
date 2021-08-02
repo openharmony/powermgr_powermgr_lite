@@ -61,7 +61,6 @@ static BOOL StartTimer(PowerTimer timer, int64_t whenMsec, int64_t intervalMsec)
         POWER_HILOGE("Failed to start timer: %s", strerror(errno));
         return FALSE;
     }
-    POWER_HILOGD("Succeed to start timer, id: %p", timer);
     return TRUE;
 }
 
@@ -72,7 +71,6 @@ static void TimerHandle(union sigval v)
         POWER_HILOGE("Invalid timer info");
         return;
     }
-    POWER_HILOGD("Timer trigger, id: %p", info->timerId);
     if (info->timerCb != NULL) {
         info->timerCb(info->data);
     }
