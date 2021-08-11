@@ -62,6 +62,7 @@ static BOOL AddRunningLockEntryLocked(Vector *vec, RunningLockEntry *entry)
     pos = VECTOR_Add(vec, (void *)e);
     if (pos == INVALID_INDEX) {
         POWER_HILOGE("Failed to add entry to vector for lock: %s", e->lock.name);
+        free(e);
         return FALSE;
     }
     POWER_HILOGD("Add running lock entry, name: %s, type: %d", e->lock.name, e->lock.type);
@@ -78,8 +79,7 @@ static BOOL RemoveRunningLockEntryLocked(Vector *vec, RunningLockEntry *entry)
         POWER_HILOGE("Non-existent running lock: %s", entry->lock.name);
         return TRUE;
     }
-    VECTOR_Swap(vec, pos, NULL);
-    RunningLockEntry *e = (RunningLockEntry *)VECTOR_At(vec, pos);
+    RunningLockEntry *e = (RunningLockEntry *)VECTOR_Swap(vec, pos, NULL);
     free(e);
     POWER_HILOGD("Remove running lock entry, name: %s, type: %d", entry->lock.name, entry->lock.type);
     if (VECTOR_Num(vec) == 0) {
