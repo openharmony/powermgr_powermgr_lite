@@ -43,7 +43,7 @@ static void *CreatClient(const char *service, const char *feature, uint32_t size
     (void)service;
     (void)feature;
     uint32_t len = size + sizeof(ScreenSaverProxyEntry);
-    uint8_t *client = malloc(len);
+    uint8_t *client = (uint8_t *)malloc(len);
     if (client == NULL) {
         POWER_HILOGE("Failed to allocate memory for screen saver proxy entry");
         return NULL;
