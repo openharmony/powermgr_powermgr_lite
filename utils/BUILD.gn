@@ -23,7 +23,7 @@ utils_sources = [
   "src/power_mgr_timer_util.c",
 ]
 
-if (is_mini_system) {
+if (is_liteos_m) {
   static_library("powermgr_utils") {
     sources = utils_sources
 

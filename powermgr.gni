@@ -30,16 +30,16 @@ powermgr_services_path = "${powermgr_path}/services"
 powermgr_utils_path = "${powermgr_path}/utils"
 
 declare_args() {
-  is_mini_system = false
-  is_small_system = false
+  is_liteos_m = false
+  is_liteos_a = false
 }
 
 if (ohos_kernel_type == "liteos_m") {
-  is_mini_system = true
+  is_liteos_m = true
   lite_library_type = "static_library"
   system_type = "mini"
 } else {
-  is_small_system = true
+  is_liteos_a = true
   lite_library_type = "shared_library"
   system_type = "small"
 }
