@@ -13,37 +13,39 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_INTERFACE_H
-#define POWERMGR_RUNNING_LOCK_INTERFACE_H
+#ifndef POWERMGR_POWER_MANAGE_INTERFACE_H
+#define POWERMGR_POWER_MANAGE_INTERFACE_H
 
 #include <iproxy_client.h>
 #include <iproxy_server.h>
 #include <iunknown.h>
 
-#include "running_lock_intf_define.h"
+#include "power_manage_intf_define.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
 typedef enum {
-    RUNNINGLOCK_FUNCID_ACQUIRE = 0,
-    RUNNINGLOCK_FUNCID_RELEASE,
-    RUNNINGLOCK_FUNCID_ISANYHOLDING,
-    RUNNINGLOCK_FUNCID_BUTT,
-} RunningLockFuncId;
+    POWERMANAGE_FUNCID_ACQUIRERUNNINGLOCK = 0,
+    POWERMANAGE_FUNCID_RELEASERUNNINGLOCK,
+    POWERMANAGE_FUNCID_ISANYRUNNINGLOCKHOLDING,
+    POWERMANAGE_FUNCID_SUSPEND,
+    POWERMANAGE_FUNCID_WAKEUP,
+    POWERMANAGE_FUNCID_BUTT,
+} PowerManageFuncId;
 
 typedef struct {
     INHERIT_SERVER_IPROXY;
-    INHERIT_RUNNINGLOCK_INTERFACE;
-} RunningLockInterface;
+    INHERIT_POWERMANAGE_INTERFACE;
+} PowerManageInterface;
 
 typedef struct {
     INHERIT_CLIENT_IPROXY;
-    INHERIT_RUNNINGLOCK_INTERFACE;
-} RunningLockProxyInterface;
+    INHERIT_POWERMANAGE_INTERFACE;
+} PowerManageProxyInterface;
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_INTERFACE_H
+#endif // POWERMGR_POWER_MANAGE_INTERFACE_H

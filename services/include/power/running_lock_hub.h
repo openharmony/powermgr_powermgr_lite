@@ -13,22 +13,22 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_FRAMEWORK_H
-#define POWERMGR_RUNNING_LOCK_FRAMEWORK_H
+#ifndef POWERMGR_RUNNING_LOCK_HUB_H
+#define POWERMGR_RUNNING_LOCK_HUB_H
 
 #include <ohos_types.h>
 
-#include "running_lock_entry.h"
+#include "suspend_ops.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void InitIdentity(RunningLockEntry *entry);
-BOOL AcquireRunningLockEntry(RunningLockEntry *entry, int32_t timeoutMs);
-BOOL ReleaseRunningLockEntry(RunningLockEntry *entry);
+BOOL RunningLockHubInit(struct AutoSuspendOps* suspendOps);
+void RunningLockHubLock(const char* name);
+void RunningLockHubUnlock(const char* name);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_FRAMEWORK_H
+#endif // POWERMGR_RUNNING_LOCK_HUB_H

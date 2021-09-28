@@ -20,30 +20,34 @@
 #include <unistd.h>
 
 #include "hilog_wrapper.h"
-#include "running_lock_feature.h"
+#include "power_manage_feature.h"
 
 typedef int32_t (*InvokeFunc)(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
 static int32_t AcquireInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
 static int32_t ReleaseInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
 static int32_t IsAnyHoldingInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
+static int32_t SuspendInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
+static int32_t WakeupInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply);
 static int32_t FeatureInvoke(IServerProxy *iProxy, int32_t funcId, void *origin, IpcIo *req, IpcIo *reply);
 
-static RunningLockFeature g_feature = {
-    RUNNING_LOCK_FEATURE_INTERFACE_IMPL,
+static PowerManageFeature g_feature = {
+    POWER_MANAGE_FEATURE_INTERFACE_IMPL,
     SERVER_IPROXY_IMPL_BEGIN,
     .Invoke = FeatureInvoke,
-    RUNNING_LOCK_INTERFACE_IMPL,
+    POWER_MANAGE_INTERFACE_IMPL,
     IPROXY_END,
     .identity = { -1, -1, NULL },
 };
 
-static InvokeFunc g_invokeFuncs[RUNNINGLOCK_FUNCID_BUTT] = {
+static InvokeFunc g_invokeFuncs[POWERMANAGE_FUNCID_BUTT] = {
     AcquireInvoke,
     ReleaseInvoke,
     IsAnyHoldingInvoke,
+    SuspendInvoke,
+    WakeupInvoke,
 };
 
-RunningLockFeature *GetRunningLockFeatureImpl(void)
+PowerManageFeature *GetPowerManageFeatureImpl(void)
 {
     return &g_feature;
 }
@@ -54,8 +58,8 @@ static int32_t FeatureInvoke(IServerProxy *iProxy, int32_t funcId, void *origin,
         POWER_HILOGE("Invalid parameter");
         return EC_INVALID;
     }
-    POWER_HILOGD("Running lock feature invoke function id: %d", funcId);
-    return (funcId >= 0 && funcId < RUNNINGLOCK_FUNCID_BUTT) ? g_invokeFuncs[funcId](iProxy, origin, req, reply) :
+    POWER_HILOGD("Power manage feature invoke function id: %d", funcId);
+    return (funcId >= 0 && funcId < POWERMANAGE_FUNCID_BUTT) ? g_invokeFuncs[funcId](iProxy, origin, req, reply) :
         EC_FAILURE;
 }
 
@@ -82,5 +86,22 @@ static int32_t IsAnyHoldingInvoke(IServerProxy *iProxy, void *origin, IpcIo *req
 {
     BOOL ret = OnIsAnyRunningLockHolding((IUnknown *)iProxy);
     IpcIoPushBool(reply, ret == TRUE);
+    return EC_SUCCESS;
+}
+
+static int32_t SuspendInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
+{
+    SuspendDeviceType reason = (SuspendDeviceType)IpcIoPopInt32(req);
+    BOOL suspendImmed = IpcIoPopBool(req) ? TRUE : FALSE;
+    OnSuspendDevice((IUnknown *)iProxy, reason, suspendImmed);
+    return EC_SUCCESS;
+}
+
+static int32_t WakeupInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
+{
+    WakeupDeviceType reason = (WakeupDeviceType)IpcIoPopInt32(req);
+    size_t len = 0;
+    const char *details = IpcIoPopString(req, &len);
+    OnWakeupDevice((IUnknown *)iProxy, reason, details);
     return EC_SUCCESS;
 }

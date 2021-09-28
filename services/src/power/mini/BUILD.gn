@@ -14,12 +14,10 @@
 import("//base/powermgr/powermgr_lite/powermgr.gni")
 import("//build/lite/config/component/lite_component.gni")
 
-source_set("runninglock_featrue_impl") {
-  cflags = [ "-fPIC" ]
-  cflags_cc = cflags
-
+static_library("powermanage_featrue_impl") {
   sources = [
-    "running_lock_feature_impl.c",
+    "auto_suspend_loop.c",
+    "power_manage_feature_impl.c",
     "running_lock_handler.c",
   ]
 
@@ -27,8 +25,16 @@ source_set("runninglock_featrue_impl") {
     "${powermgr_frameworks_path}/include",
     "${powermgr_frameworks_path}/include/${system_type}",
     "${powermgr_services_path}/include",
+    "${powermgr_innerkits_path}",
     "${powermgr_kits_path}",
+    "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
+    "//kernel/liteos_m/components/power",
+    "//kernel/liteos_m/kernel/include",
+    "//kernel/liteos_m/utils",
   ]
 
-  deps = [ "//foundation/distributedschedule/samgr_lite/samgr:samgr" ]
+  deps = [
+    "//foundation/distributedschedule/samgr_lite/samgr:samgr",
+    "//kernel/liteos_m/kernel:kernel",
+  ]
 }

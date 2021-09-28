@@ -13,45 +13,48 @@
  * limitations under the License.
  */
 
-#include "running_lock_framework.h"
-
 #include <stdint.h>
 #include <stdlib.h>
 
 #include <ohos_errno.h>
+#include <ohos_types.h>
 #include <pthread.h>
 #include <registry.h>
+#include <samgr_lite.h>
 #include <securec.h>
 #include <unistd.h>
 
 #include "hilog_wrapper.h"
-#include "running_lock_interface.h"
+#include "power_manage_interface.h"
+#include "power_mgr.h"
 
 #define MAX_DATA_LEN    1024
 
 typedef struct {
-    INHERIT_IUNKNOWNENTRY(RunningLockProxyInterface);
-} RunningLockProxyEntry;
+    INHERIT_IUNKNOWNENTRY(PowerManageProxyInterface);
+} PowerManageProxyEntry;
 
 static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
-static RunningLockProxyInterface *g_intf = NULL;
+static PowerManageProxyInterface *g_intf = NULL;
 
 static int32_t AcquireRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry *entry, int32_t timeoutMs);
 static int32_t ReleaseRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry *entry);
 static BOOL IsAnyRunningLockHoldingProxy(IUnknown *iUnknown);
+static void SuspendDeviceProxy(IUnknown *iUnknown, SuspendDeviceType reason, BOOL suspendImmed);
+static void WakeupDeviceProxy(IUnknown *iUnknown, WakeupDeviceType reason, const char* details);
 
 static void *CreatClient(const char *service, const char *feature, uint32_t size)
 {
     (void)service;
     (void)feature;
-    uint32_t len = size + sizeof(RunningLockProxyEntry);
+    uint32_t len = size + sizeof(PowerManageProxyEntry);
     uint8_t *client = (uint8_t *)malloc(len);
     if (client == NULL) {
-        POWER_HILOGE("Failed to allocate memory for running lock proxy entry");
+        POWER_HILOGE("Failed to allocate memory for power manage proxy entry");
         return NULL;
     }
     (void)memset_s(client, len, 0, len);
-    RunningLockProxyEntry *entry = (RunningLockProxyEntry *)&client[size];
+    PowerManageProxyEntry *entry = (PowerManageProxyEntry *)&client[size];
     entry->ver =  ((uint16)CLIENT_PROXY_VER | (uint16)DEFAULT_VERSION);
     entry->ref = 1;
     entry->iUnknown.QueryInterface = IUNKNOWN_QueryInterface;
@@ -61,6 +64,8 @@ static void *CreatClient(const char *service, const char *feature, uint32_t size
     entry->iUnknown.AcquireRunningLockEntryFunc = AcquireRunningLockEntryProxy;
     entry->iUnknown.ReleaseRunningLockEntryFunc = ReleaseRunningLockEntryProxy;
     entry->iUnknown.IsAnyRunningLockHoldingFunc = IsAnyRunningLockHoldingProxy;
+    entry->iUnknown.SuspendDeviceFunc = SuspendDeviceProxy;
+    entry->iUnknown.WakeupDeviceFunc = WakeupDeviceProxy;
     return client;
 }
 
@@ -69,7 +74,7 @@ static void DestroyClient(const char *service, const char *feature, void *iproxy
     free(iproxy);
 }
 
-static RunningLockProxyInterface *GetRunningLockProxyInterface(void)
+static PowerManageProxyInterface *GetPowerManageProxyInterface(void)
 {
     if (g_intf != NULL) {
         return g_intf;
@@ -80,23 +85,23 @@ static RunningLockProxyInterface *GetRunningLockProxyInterface(void)
         return g_intf;
     }
 
-    SAMGR_RegisterFactory(POWER_MANAGE_SERVICE, POWER_RUNNING_LOCK_FEATURE, CreatClient, DestroyClient);
+    SAMGR_RegisterFactory(POWER_MANAGE_SERVICE, POWER_MANAGE_FEATURE, CreatClient, DestroyClient);
 
-    IUnknown *iUnknown = GetRunningLockIUnknown();
+    IUnknown *iUnknown = SAMGR_GetInstance()->GetFeatureApi(POWER_MANAGE_SERVICE, POWER_MANAGE_FEATURE);
     if (iUnknown == NULL) {
-        POWER_HILOGE("Failed to get running lock iUnknown");
+        POWER_HILOGE("Failed to get power manage iUnknown");
         pthread_mutex_unlock(&g_mutex);
         return NULL;
     }
 
     int ret = iUnknown->QueryInterface(iUnknown, DEFAULT_VERSION, (void **)&g_intf);
     if ((ret != EC_SUCCESS) || (g_intf == NULL)) {
-        POWER_HILOGE("Failed to query running lock interface");
+        POWER_HILOGE("Failed to query power manage interface");
         pthread_mutex_unlock(&g_mutex);
         return NULL;
     }
     pthread_mutex_unlock(&g_mutex);
-    POWER_HILOGI("Succeed to get running lock proxy interface");
+    POWER_HILOGI("Succeed to get power manage proxy interface");
     return g_intf;
 }
 
@@ -127,8 +132,8 @@ static int32_t AcquireRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry
     IpcIoPushInt32(&request, timeoutMs);
 
     int32_t ret;
-    RunningLockProxyInterface *proxy = (RunningLockProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_ACQUIRE, &request, &ret, AcquireReleaseCallback);
+    PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_ACQUIRERUNNINGLOCK, &request, &ret, AcquireReleaseCallback);
     POWER_HILOGD("Acquire running lock done, name: %s, type: %d", entry->lock.name, entry->lock.type);
 
     return ret;
@@ -147,8 +152,8 @@ static int32_t ReleaseRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry
     IpcIoPushFlatObj(&request, entry, sizeof(RunningLockEntry));
 
     int32_t ret;
-    RunningLockProxyInterface *proxy = (RunningLockProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_RELEASE, &request, &ret, AcquireReleaseCallback);
+    PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_RELEASERUNNINGLOCK, &request, &ret, AcquireReleaseCallback);
     POWER_HILOGD("Release running lock done, name: %s, type: %d", entry->lock.name, entry->lock.type);
 
     return ret;
@@ -170,8 +175,8 @@ static int32_t IsAnyHoldingCallback(IOwner owner, int32_t code, IpcIo *reply)
 static BOOL IsAnyRunningLockHoldingProxy(IUnknown *iUnknown)
 {
     BOOL ret;
-    RunningLockProxyInterface *proxy = (RunningLockProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, RUNNINGLOCK_FUNCID_ISANYHOLDING, NULL, &ret, IsAnyHoldingCallback);
+    PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_ISANYRUNNINGLOCKHOLDING, NULL, &ret, IsAnyHoldingCallback);
     return ret;
 }
 
@@ -187,7 +192,7 @@ void InitIdentity(RunningLockEntry *entry)
 BOOL AcquireRunningLockEntry(RunningLockEntry *entry, int32_t timeoutMs)
 {
     int32_t ret = EC_FAILURE;
-    RunningLockProxyInterface *intf = GetRunningLockProxyInterface();
+    PowerManageProxyInterface *intf = GetPowerManageProxyInterface();
     if ((intf != NULL) && (intf->AcquireRunningLockEntryFunc != NULL)) {
         ret = intf->AcquireRunningLockEntryFunc((IUnknown *)intf, entry, timeoutMs);
     }
@@ -197,7 +202,7 @@ BOOL AcquireRunningLockEntry(RunningLockEntry *entry, int32_t timeoutMs)
 BOOL ReleaseRunningLockEntry(RunningLockEntry *entry)
 {
     int32_t ret = EC_FAILURE;
-    RunningLockProxyInterface *intf = GetRunningLockProxyInterface();
+    PowerManageProxyInterface *intf = GetPowerManageProxyInterface();
     if ((intf != NULL) && (intf->ReleaseRunningLockEntryFunc != NULL)) {
         ret = intf->ReleaseRunningLockEntryFunc((IUnknown *)intf, entry);
     }
@@ -207,9 +212,36 @@ BOOL ReleaseRunningLockEntry(RunningLockEntry *entry)
 BOOL IsAnyRunningLockHolding()
 {
     BOOL ret = FALSE;
-    RunningLockProxyInterface *intf = GetRunningLockProxyInterface();
+    PowerManageProxyInterface *intf = GetPowerManageProxyInterface();
     if ((intf != NULL) && (intf->IsAnyRunningLockHoldingFunc != NULL)) {
         ret = intf->IsAnyRunningLockHoldingFunc((IUnknown *)intf);
     }
     return ret;
+}
+
+static void SuspendDeviceProxy(IUnknown *iUnknown, SuspendDeviceType reason, BOOL suspendImmed)
+{
+    IpcIo request;
+    char buffer[MAX_DATA_LEN];
+    IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
+    IpcIoPushInt32(&request, reason);
+    IpcIoPushBool(&request, (suspendImmed == TRUE));
+
+    PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_SUSPEND, &request, NULL, NULL);
+    POWER_HILOGD("Suspend device done, reason: %{public}d", reason);
+}
+
+static void WakeupDeviceProxy(IUnknown *iUnknown, WakeupDeviceType reason, const char* details)
+{
+    const char* detailReason = (details != NULL) ? details : "No details";
+    IpcIo request;
+    char buffer[MAX_DATA_LEN];
+    IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
+    IpcIoPushInt32(&request, reason);
+    IpcIoPushString(&request, detailReason);
+
+    PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_WAKEUP, &request, NULL, NULL);
+    POWER_HILOGD("Wakeup device done, reason: %{public}d", reason);
 }

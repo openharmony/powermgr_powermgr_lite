@@ -13,25 +13,28 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_INTF_DEFINE_H
-#define POWERMGR_RUNNING_LOCK_INTF_DEFINE_H
+#ifndef POWERMGR_POWER_MANAGE_INTF_DEFINE_H
+#define POWERMGR_POWER_MANAGE_INTF_DEFINE_H
 
 #include <iunknown.h>
 
+#include "power_manage.h"
 #include "running_lock_entry.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-#define POWER_RUNNING_LOCK_FEATURE        "runninglock"
+#define POWER_MANAGE_FEATURE        "powermanage"
 
-#define INHERIT_RUNNINGLOCK_INTERFACE                                                                           \
+#define INHERIT_POWERMANAGE_INTERFACE                                                                           \
     int32_t (*AcquireRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry, int32_t timeoutMs);     \
     int32_t (*ReleaseRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry);                        \
-    BOOL (*IsAnyRunningLockHoldingFunc)(IUnknown *iUnknown)
+    BOOL (*IsAnyRunningLockHoldingFunc)(IUnknown *iUnknown);                                                    \
+    void (*SuspendDeviceFunc)(IUnknown *iUnknown, SuspendDeviceType reason, BOOL suspendImmed);                 \
+    void (*WakeupDeviceFunc)(IUnknown *iUnknown, WakeupDeviceType reason, const char* details);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_INTF_DEFINE_H
+#endif // POWERMGR_POWER_MANAGE_INTF_DEFINE_H
