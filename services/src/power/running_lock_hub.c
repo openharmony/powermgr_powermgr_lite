@@ -22,12 +22,13 @@ static struct RunningLockOps* g_runningLockOps = NULL;
 void RunningLockHubLock(const char* name)
 {
     if (!g_runningLockOps || !g_suspendOps) {
+        POWER_HILOGE("Invalid running lock or suspend ops");
         return;
     }
     g_runningLockOps->Acquire(name);
     /*
-     * Better to maintain a running lock map by name here.
      * Because the upper layer call can ensure the acquirment of locks, it is simple to implement here.
+     * It's better to maintain a running lock map by name.
      */
     g_suspendOps->IncSuspendBlockCounter();
 }
@@ -35,6 +36,7 @@ void RunningLockHubLock(const char* name)
 void RunningLockHubUnlock(const char* name)
 {
     if (!g_runningLockOps || !g_suspendOps) {
+        POWER_HILOGE("Invalid running lock or suspend ops");
         return;
     }
     g_runningLockOps->Release(name);

@@ -58,7 +58,7 @@ lite_library("powermgrservice") {
   include_dirs += local_include_dirs
 
   deps = [
-    "src/power/${system_type}:powermanage_featrue_impl",
+    "src/power/${system_type}:powermanage_feature_impl",
     "//foundation/distributedschedule/samgr_lite/samgr:samgr",
   ]
   deps += local_deps

@@ -92,7 +92,7 @@ BOOL IsAnyRunningLockHolding()
     return ret;
 }
 
-BOOL SuspendDevice(SuspendDeviceType reason, BOOL suspendImmed)
+void SuspendDevice(SuspendDeviceType reason, BOOL suspendImmed)
 {
     PowerManageInterface *intf = GetPowerManageInterface();
     if ((intf != NULL) && (intf->SuspendDeviceFunc != NULL)) {
@@ -100,7 +100,7 @@ BOOL SuspendDevice(SuspendDeviceType reason, BOOL suspendImmed)
     }
 }
 
-BOOL WakeupDevice(WakeupDeviceType reason, const char* details)
+void WakeupDevice(WakeupDeviceType reason, const char* details)
 {
     const char* detailReason = (details != NULL) ? details : "No details";
     PowerManageInterface *intf = GetPowerManageInterface();

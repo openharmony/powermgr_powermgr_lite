@@ -53,7 +53,7 @@ typedef enum {
  * Suspend device.
  *
  * @param reason The reason why will you suspend the device.
- * @param suspendImmed The flag indicating whether the system will go to sleep immediately.
+ * @param suspendImmed The flag indicating whether the system will suspend immediately.
  */
 void SuspendDevice(SuspendDeviceType reason, BOOL suspendImmed);
 

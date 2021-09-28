@@ -32,7 +32,7 @@ extern "C" {
     int32_t (*ReleaseRunningLockEntryFunc)(IUnknown *iUnknown, RunningLockEntry *entry);                        \
     BOOL (*IsAnyRunningLockHoldingFunc)(IUnknown *iUnknown);                                                    \
     void (*SuspendDeviceFunc)(IUnknown *iUnknown, SuspendDeviceType reason, BOOL suspendImmed);                 \
-    void (*WakeupDeviceFunc)(IUnknown *iUnknown, WakeupDeviceType reason, const char* details);
+    void (*WakeupDeviceFunc)(IUnknown *iUnknown, WakeupDeviceType reason, const char* details)
 
 #ifdef __cplusplus
 }

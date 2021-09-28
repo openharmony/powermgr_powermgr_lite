@@ -35,7 +35,7 @@ int32_t OnAcquireRunningLockEntry(IUnknown *iUnknown, RunningLockEntry *entry, i
 int32_t OnReleaseRunningLockEntry(IUnknown *iUnknown, RunningLockEntry *entry);
 BOOL OnIsAnyRunningLockHolding(IUnknown *iUnknown);
 void OnSuspendDevice(IUnknown *iUnknown, SuspendDeviceType reason, BOOL suspendImmed);
-void OnWakeupDeviceFunc(IUnknown *iUnknown, WakeupDeviceType reason, const char* details);
+void OnWakeupDevice(IUnknown *iUnknown, WakeupDeviceType reason, const char* details);
 
 #define POWER_MANAGE_FEATURE_INTERFACE_IMPL             \
     .GetName = GetPowerManageFeatureName,               \

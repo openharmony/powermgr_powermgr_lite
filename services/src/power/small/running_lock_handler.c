@@ -28,7 +28,7 @@ static int32_t g_unlockFd = -1;
 
 static int32_t OpenLockFile(const char* path)
 {
-    int32_t fd = open("path", O_RDWR);
+    int32_t fd = open(path, O_RDWR);
     if (fd < 0) {
         POWER_HILOGE("Failed to open %{public}s, err: %{public}s", path, strerror(errno));
     }
@@ -53,13 +53,13 @@ static int32_t WriteLock(int32_t fd, const char *name)
 static void RunningLockAcquire(const char *name)
 {
     int32_t ret = WriteLock(g_lockFd, name);
-    POWER_HILOGI("Acquire runninglock: %{public}s, ret: %{public}d", name, ret);
+    POWER_HILOGD("Acquire runninglock: %{public}s, ret: %{public}d", name, ret);
 }
 
 static void RunningLockRelease(const char *name)
 {
     int32_t ret = WriteLock(g_unlockFd, name);
-    POWER_HILOGI("Release runninglock: %{public}s, ret: %{public}d", name, ret);
+    POWER_HILOGD("Release runninglock: %{public}s, ret: %{public}d", name, ret);
 }
 
 static struct RunningLockOps g_ops = {

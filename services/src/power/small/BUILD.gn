@@ -14,7 +14,7 @@
 import("//base/powermgr/powermgr_lite/powermgr.gni")
 import("//build/lite/config/component/lite_component.gni")
 
-source_set("powermanage_featrue_impl") {
+source_set("powermanage_feature_impl") {
   cflags = [ "-fPIC" ]
   cflags_cc = cflags
 

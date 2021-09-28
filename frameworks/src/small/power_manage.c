@@ -234,14 +234,30 @@ static void SuspendDeviceProxy(IUnknown *iUnknown, SuspendDeviceType reason, BOO
 
 static void WakeupDeviceProxy(IUnknown *iUnknown, WakeupDeviceType reason, const char* details)
 {
-    const char* detailReason = (details != NULL) ? details : "No details";
     IpcIo request;
     char buffer[MAX_DATA_LEN];
     IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
     IpcIoPushInt32(&request, reason);
-    IpcIoPushString(&request, detailReason);
+    IpcIoPushString(&request, details);
 
     PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
     proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_WAKEUP, &request, NULL, NULL);
     POWER_HILOGD("Wakeup device done, reason: %{public}d", reason);
+}
+
+void SuspendDevice(SuspendDeviceType reason, BOOL suspendImmed)
+{
+    PowerManageProxyInterface *intf = GetPowerManageProxyInterface();
+    if ((intf != NULL) && (intf->SuspendDeviceFunc != NULL)) {
+        intf->SuspendDeviceFunc((IUnknown *)intf, reason, suspendImmed);
+    }
+}
+
+void WakeupDevice(WakeupDeviceType reason, const char* details)
+{
+    const char* detailReason = (details != NULL) ? details : "No details";
+    PowerManageProxyInterface *intf = GetPowerManageProxyInterface();
+    if ((intf != NULL) && (intf->WakeupDeviceFunc != NULL)) {
+        intf->WakeupDeviceFunc((IUnknown *)intf, reason, detailReason);
+    }
 }

@@ -28,7 +28,7 @@ static uint32_t g_suspendBlockCounter = 0;
 
 static BOOL SuspendConditionSatisfied()
 {
-    return g_suspendBlockCounter == 0;
+    return (g_suspendBlockCounter == 0) ? TRUE : FALSE;
 }
 
 static void WaitingSuspendCondition()
@@ -72,7 +72,7 @@ static void Enable()
     started = TRUE;
 }
 
-void IncSuspendBlockCounter()
+static void IncSuspendBlockCounter()
 {
     pthread_mutex_lock(&g_mutex);
     g_suspendBlockCounter++;
@@ -80,7 +80,7 @@ void IncSuspendBlockCounter()
     pthread_mutex_unlock(&g_mutex);
 }
 
-void DecSuspendBlockCounter()
+static void DecSuspendBlockCounter()
 {
     pthread_mutex_lock(&g_mutex);
     g_suspendBlockCounter--;
@@ -95,7 +95,7 @@ static struct AutoSuspendOps g_ops = {
     .Enable = Enable,
     .IncSuspendBlockCounter = IncSuspendBlockCounter,
     .DecSuspendBlockCounter = DecSuspendBlockCounter,
-}
+};
 
 struct AutoSuspendOps* AutoSuspendOpsInit()
 {

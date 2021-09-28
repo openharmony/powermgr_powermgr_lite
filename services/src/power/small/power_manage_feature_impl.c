@@ -101,7 +101,7 @@ static int32_t WakeupInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcI
 {
     WakeupDeviceType reason = (WakeupDeviceType)IpcIoPopInt32(req);
     size_t len = 0;
-    const char *details = IpcIoPopString(req, &len);
+    const char *details = (const char *)IpcIoPopString(req, &len);
     OnWakeupDevice((IUnknown *)iProxy, reason, details);
     return EC_SUCCESS;
 }

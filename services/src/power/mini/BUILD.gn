@@ -14,7 +14,7 @@
 import("//base/powermgr/powermgr_lite/powermgr.gni")
 import("//build/lite/config/component/lite_component.gni")
 
-static_library("powermanage_featrue_impl") {
+static_library("powermanage_feature_impl") {
   sources = [
     "auto_suspend_loop.c",
     "power_manage_feature_impl.c",

@@ -90,7 +90,7 @@ void OnSuspendDevice(IUnknown *iUnknown, SuspendDeviceType reason, BOOL suspendI
 void OnWakeupDevice(IUnknown *iUnknown, WakeupDeviceType reason, const char* details)
 {
     /*
-     * It should check if the calling pid has permission to wakup device
+     * It should check if the calling pid has permission to wakeup device
      */
     (void)iUnknown;
     POWER_HILOGI("Waking up device, reason: %{public}d, details: %{public}s", reason, details);
