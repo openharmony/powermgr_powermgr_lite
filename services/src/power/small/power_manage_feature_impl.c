@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#include <ohos_errno.h>
 #include <iproxy_server.h>
+#include <ohos_errno.h>
 
 #include <pthread.h>
 #include <unistd.h>

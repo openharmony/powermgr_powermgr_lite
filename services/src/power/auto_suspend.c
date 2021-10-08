@@ -20,6 +20,8 @@
 #include "hilog_wrapper.h"
 #include "power/suspend_ops.h"
 
+#define SUSPEND_CHECK_INTERVAL_US       500000
+
 static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t g_cond = PTHREAD_COND_INITIALIZER;
 static pthread_t g_suspendThread;
@@ -48,7 +50,7 @@ static void *SuspendThreadLoop(void *arg)
 
     POWER_HILOGI("Suspend thread enter loop");
     while (1) {
-        usleep(500000); // sleep 500ms
+        usleep(SUSPEND_CHECK_INTERVAL_US);
         if (g_suspendLoop(WaitingSuspendCondition) == FALSE) {
             break;
         }

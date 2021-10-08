@@ -37,8 +37,8 @@ static int32_t OpenLockFile(const char* path)
 
 static int32_t WriteLock(int32_t fd, const char *name)
 {
-    if (name == NULL) {
-        POWER_HILOGE("Invalid lock name");
+    if ((fd < 0) || (name == NULL)) {
+        POWER_HILOGE("Invalid parameter");
         return -1;
     }
 
@@ -77,6 +77,7 @@ struct RunningLockOps* RunningLockOpsInit()
     g_unlockFd = OpenLockFile("/proc/power/power_unlock");
     if (g_unlockFd < 0) {
         close(g_lockFd);
+        g_lockFd = -1;
         return NULL;
     }
 
