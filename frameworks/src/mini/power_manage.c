@@ -39,6 +39,7 @@ static PowerManageInterface *GetPowerManageInterface(void)
     IUnknown *iUnknown = SAMGR_GetInstance()->GetFeatureApi(POWER_MANAGE_SERVICE, POWER_MANAGE_FEATURE);
     if (iUnknown == NULL) {
         POWER_HILOGE("Failed to get power manage iUnknown");
+        pthread_mutex_unlock(&g_mutex);
         return NULL;
     }
 
