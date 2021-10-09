@@ -38,8 +38,11 @@ lite_library("powermgrservice") {
   target_type = lite_library_type
 
   sources = [
+    "src/power/auto_suspend.c",
+    "src/power/running_lock_hub.c",
+    "src/power/suspend_controller.c",
+    "src/power_manage_feature.c",
     "src/power_manage_service.c",
-    "src/running_lock_feature.c",
     "src/running_lock_mgr.c",
   ]
   sources += local_sources
@@ -48,13 +51,14 @@ lite_library("powermgrservice") {
     "include",
     "${powermgr_frameworks_path}/include",
     "${powermgr_frameworks_path}/include/${system_type}",
+    "${powermgr_innerkits_path}",
     "${powermgr_kits_path}",
     "//utils/native/lite/include",
   ]
   include_dirs += local_include_dirs
 
   deps = [
-    "src/runninglock/${system_type}:runninglock_featrue_impl",
+    "src/power/${system_type}:powermanage_feature_impl",
     "//foundation/distributedschedule/samgr_lite/samgr:samgr",
   ]
   deps += local_deps

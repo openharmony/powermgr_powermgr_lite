@@ -13,40 +13,40 @@
  * limitations under the License.
  */
 
-#include "running_lock_feature.h"
+#include "power_manage_feature.h"
 
 #include <feature.h>
 #include <ohos_init.h>
 #include <samgr_lite.h>
 
 #include "hilog_wrapper.h"
+#include "power/suspend_controller.h"
 #include "power_mgr.h"
-#include "running_lock_framework.h"
 #include "running_lock_mgr.h"
 
-const char *GetRunningLockFeatureName(Feature *feature)
+const char *GetPowerManageFeatureName(Feature *feature)
 {
     (void)feature;
-    return POWER_RUNNING_LOCK_FEATURE;
+    return POWER_MANAGE_FEATURE;
 }
 
-void OnRunningLockFeatureInitialize(Feature *feature, Service *parent, Identity identity)
+void OnPowerManageFeatureInitialize(Feature *feature, Service *parent, Identity identity)
 {
     if (feature == NULL) {
         POWER_HILOGE("Invalid feature");
         return;
     }
 
-    RunningLockFeature *f = (RunningLockFeature *)feature;
+    PowerManageFeature *f = (PowerManageFeature *)feature;
     f->identity = identity;
-    POWER_HILOGI("Init running lock feature done");
+    POWER_HILOGI("Init power manage feature done");
 }
 
-void OnRunningLockFeatureStop(Feature *feature, Identity identity)
+void OnPowerManageFeatureStop(Feature *feature, Identity identity)
 {
     (void)feature;
     (void)identity;
-    RunningLockFeature *f = GetRunningLockFeatureImpl();
+    PowerManageFeature *f = GetPowerManageFeatureImpl();
     if (f != NULL) {
         f->identity.queueId = NULL;
         f->identity.featureId = -1;
@@ -54,7 +54,7 @@ void OnRunningLockFeatureStop(Feature *feature, Identity identity)
     }
 }
 
-BOOL OnRunningLockFeatureMessage(Feature *feature, Request *request)
+BOOL OnPowerManageFeatureMessage(Feature *feature, Request *request)
 {
     return ((feature != NULL) && (request != NULL)) ? TRUE : FALSE;
 }
@@ -77,6 +77,26 @@ BOOL OnIsAnyRunningLockHolding(IUnknown *iUnknown)
     return RunningLockMgrIsAnyLockHolding();
 }
 
+void OnSuspendDevice(IUnknown *iUnknown, SuspendDeviceType reason, BOOL suspendImmed)
+{
+    /*
+     * It should check if the calling pid has permission to suspend device
+     */
+    (void)iUnknown;
+    POWER_HILOGI("Suspending device, reason: %{public}d, suspendImmed: %{public}d", reason, suspendImmed);
+    EnableSuspend();
+}
+
+void OnWakeupDevice(IUnknown *iUnknown, WakeupDeviceType reason, const char* details)
+{
+    /*
+     * It should check if the calling pid has permission to wakeup device
+     */
+    (void)iUnknown;
+    POWER_HILOGI("Waking up device, reason: %{public}d, details: %{public}s", reason, details);
+    DisableSuspend();
+}
+
 static void Init(void)
 {
     SamgrLite *sam = SAMGR_GetInstance();
@@ -85,22 +105,23 @@ static void Init(void)
         return;
     }
 
-    RunningLockFeature *feature = GetRunningLockFeatureImpl();
+    PowerManageFeature *feature = GetPowerManageFeatureImpl();
     if (feature == NULL) {
-        POWER_HILOGE("Failed to get running lock feature");
+        POWER_HILOGE("Failed to get power manage feature");
         return;
     }
     BOOL result = sam->RegisterFeature(POWER_MANAGE_SERVICE, (Feature *)feature);
     if (result == FALSE) {
-        POWER_HILOGE("Failed to register running lock feature");
+        POWER_HILOGE("Failed to register power manage feature");
         return;
     }
-    result = sam->RegisterFeatureApi(POWER_MANAGE_SERVICE, POWER_RUNNING_LOCK_FEATURE, GET_IUNKNOWN(*feature));
+    result = sam->RegisterFeatureApi(POWER_MANAGE_SERVICE, POWER_MANAGE_FEATURE, GET_IUNKNOWN(*feature));
     if (result == FALSE) {
-        POWER_HILOGE("Failed to register running lock feature api");
+        POWER_HILOGE("Failed to register power manage feature api");
         return;
     }
     RunningLockMgrInit();
-    POWER_HILOGI("Succeed to register running lock feature");
+    SuspendControllerInit();
+    POWER_HILOGI("Succeed to register power manage feature");
 }
 SYS_FEATURE_INIT(Init);

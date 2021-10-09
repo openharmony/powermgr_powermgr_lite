@@ -13,28 +13,19 @@
  * limitations under the License.
  */
 
-#include <stdint.h>
+#include <iunknown.h>
 
-#include <los_pm.h>
+#include "power_manage_feature.h"
 
-#include "hilog_wrapper.h"
+static PowerManageFeature g_feature = {
+    POWER_MANAGE_FEATURE_INTERFACE_IMPL,
+    DEFAULT_IUNKNOWN_ENTRY_BEGIN,
+    POWER_MANAGE_INTERFACE_IMPL,
+    DEFAULT_IUNKNOWN_ENTRY_END,
+    .identity = { -1, -1, NULL },
+};
 
-void RunningLockHandlerLock(const char *name)
+PowerManageFeature *GetPowerManageFeatureImpl(void)
 {
-    if (name == NULL) {
-        POWER_HILOGE("Invalid lock name");
-        return;
-    }
-    uint32_t ret = LOS_PmLockRequest(name);
-    POWER_HILOGI("Lock request, name: %s, ret: %u", name, ret);
-}
-
-void RunningLockHandlerUnlock(const char *name)
-{
-    if (name == NULL) {
-        POWER_HILOGE("Invalid lock name");
-        return;
-    }
-    uint32_t ret = LOS_PmLockRelease(name);
-    POWER_HILOGI("Lock release, name: %s, ret: %u", name, ret);
+    return &g_feature;
 }

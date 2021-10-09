@@ -17,7 +17,6 @@
 
 #include <common.h>
 #include <errno.h>
-#include <pthread.h>
 #include <securec.h>
 #include <signal.h>
 #include <stdint.h>
@@ -35,7 +34,6 @@ typedef struct {
     void *data;
 } PowerTimerInfo;
 
-static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 static BOOL g_inited = FALSE;
 static Vector g_timers;
 

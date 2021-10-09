@@ -14,14 +14,16 @@
 import("//base/powermgr/powermgr_lite/powermgr.gni")
 import("//build/lite/config/component/lite_component.gni")
 
-static_library("runninglock_impl") {
-  sources = [ "running_lock_framework.c" ]
+static_library("powermanage_impl") {
+  sources = [ "power_manage.c" ]
 
   include_dirs = [
     "${powermgr_frameworks_path}/include",
     "${powermgr_frameworks_path}/include/${system_type}",
+    "${powermgr_innerkits_path}",
     "${powermgr_kits_path}",
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
+    "//utils/native/lite/include",
   ]
 
   deps = [

@@ -13,19 +13,20 @@
  * limitations under the License.
  */
 
-#include <iunknown.h>
+#ifndef POWERMGR_SUSPEND_CONTROLLER_H
+#define POWERMGR_SUSPEND_CONTROLLER_H
 
-#include "running_lock_feature.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
-static RunningLockFeature g_feature = {
-    RUNNING_LOCK_FEATURE_INTERFACE_IMPL,
-    DEFAULT_IUNKNOWN_ENTRY_BEGIN,
-    RUNNING_LOCK_INTERFACE_IMPL,
-    DEFAULT_IUNKNOWN_ENTRY_END,
-    .identity = { -1, -1, NULL },
-};
+void SuspendControllerInit();
+void ScAcquireRunningLock(const char* name);
+void ScReleaseRunningLock(const char* name);
+void EnableSuspend();
+void DisableSuspend();
 
-RunningLockFeature *GetRunningLockFeatureImpl(void)
-{
-    return &g_feature;
+#ifdef __cplusplus
 }
+#endif // __cplusplus
+#endif // POWERMGR_SUSPEND_CONTROLLER_H
