@@ -13,22 +13,23 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_FRAMEWORK_H
-#define POWERMGR_RUNNING_LOCK_FRAMEWORK_H
+#ifndef POWERMGR_POWER_MANAGE_INTERFACE_H
+#define POWERMGR_POWER_MANAGE_INTERFACE_H
 
-#include <ohos_types.h>
+#include <iunknown.h>
 
-#include "running_lock_entry.h"
+#include "power_manage_intf_define.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void InitIdentity(RunningLockEntry *entry);
-BOOL AcquireRunningLockEntry(RunningLockEntry *entry, int32_t timeoutMs);
-BOOL ReleaseRunningLockEntry(RunningLockEntry *entry);
+typedef struct {
+    INHERIT_IUNKNOWN;
+    INHERIT_POWERMANAGE_INTERFACE;
+} PowerManageInterface;
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_FRAMEWORK_H
+#endif // POWERMGR_POWER_MANAGE_INTERFACE_H

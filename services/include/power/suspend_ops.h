@@ -13,23 +13,34 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_INTERFACE_H
-#define POWERMGR_RUNNING_LOCK_INTERFACE_H
+#ifndef POWERMGR_SUSPEND_OPS_H
+#define POWERMGR_SUSPEND_OPS_H
 
-#include <iunknown.h>
-
-#include "running_lock_intf_define.h"
+#include <ohos_types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-typedef struct {
-    INHERIT_IUNKNOWN;
-    INHERIT_RUNNINGLOCK_INTERFACE;
-} RunningLockInterface;
+struct RunningLockOps {
+    void (*Acquire)(const char *name);
+    void (*Release)(const char *name);
+};
+
+struct AutoSuspendOps {
+    void (*Enable)();
+    void (*IncSuspendBlockCounter)();
+    void (*DecSuspendBlockCounter)();
+};
+
+typedef void (*AutoSuspendWait)();
+typedef BOOL (*AutoSuspendLoop)(AutoSuspendWait waitFunc);
+
+struct RunningLockOps* RunningLockOpsInit();
+struct AutoSuspendOps* AutoSuspendOpsInit();
+AutoSuspendLoop AutoSuspendLoopInit();
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_INTERFACE_H
+#endif // POWERMGR_SUSPEND_OPS_H

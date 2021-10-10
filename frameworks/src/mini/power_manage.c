@@ -13,19 +13,20 @@
  * limitations under the License.
  */
 
-#include "running_lock_framework.h"
-
 #include <stdint.h>
 
+#include <iunknown.h>
 #include <pthread.h>
+#include <samgr_lite.h>
 
 #include "hilog_wrapper.h"
-#include "running_lock_interface.h"
+#include "power_manage_interface.h"
+#include "power_mgr.h"
 
 static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
-static RunningLockInterface *g_intf = NULL;
+static PowerManageInterface *g_intf = NULL;
 
-static RunningLockInterface *GetRunningLockInterface(void)
+static PowerManageInterface *GetPowerManageInterface(void)
 {
     if (g_intf != NULL) {
         return g_intf;
@@ -35,15 +36,16 @@ static RunningLockInterface *GetRunningLockInterface(void)
         pthread_mutex_unlock(&g_mutex);
         return g_intf;
     }
-    IUnknown *iUnknown = GetRunningLockIUnknown();
+    IUnknown *iUnknown = SAMGR_GetInstance()->GetFeatureApi(POWER_MANAGE_SERVICE, POWER_MANAGE_FEATURE);
     if (iUnknown == NULL) {
-        POWER_HILOGE("Failed to get running lock iUnknown");
+        POWER_HILOGE("Failed to get power manage iUnknown");
+        pthread_mutex_unlock(&g_mutex);
         return NULL;
     }
 
     int ret = iUnknown->QueryInterface(iUnknown, DEFAULT_VERSION, (void **)&g_intf);
     if ((ret != EC_SUCCESS) || (g_intf == NULL)) {
-        POWER_HILOGE("Failed to query running lock interface");
+        POWER_HILOGE("Failed to query power manage interface");
         pthread_mutex_unlock(&g_mutex);
         return NULL;
     }
@@ -64,7 +66,7 @@ void InitIdentity(RunningLockEntry *entry)
 BOOL AcquireRunningLockEntry(RunningLockEntry *entry, int32_t timeoutMs)
 {
     int32_t ret = EC_FAILURE;
-    RunningLockInterface *intf = GetRunningLockInterface();
+    PowerManageInterface *intf = GetPowerManageInterface();
     if ((intf != NULL) && (intf->AcquireRunningLockEntryFunc != NULL)) {
         ret = intf->AcquireRunningLockEntryFunc((IUnknown *)intf, entry, timeoutMs);
     }
@@ -74,7 +76,7 @@ BOOL AcquireRunningLockEntry(RunningLockEntry *entry, int32_t timeoutMs)
 BOOL ReleaseRunningLockEntry(RunningLockEntry *entry)
 {
     int32_t ret = EC_FAILURE;
-    RunningLockInterface *intf = GetRunningLockInterface();
+    PowerManageInterface *intf = GetPowerManageInterface();
     if ((intf != NULL) && (intf->ReleaseRunningLockEntryFunc != NULL)) {
         ret = intf->ReleaseRunningLockEntryFunc((IUnknown *)intf, entry);
     }
@@ -84,9 +86,26 @@ BOOL ReleaseRunningLockEntry(RunningLockEntry *entry)
 BOOL IsAnyRunningLockHolding()
 {
     BOOL ret = FALSE;
-    RunningLockInterface *intf = GetRunningLockInterface();
+    PowerManageInterface *intf = GetPowerManageInterface();
     if ((intf != NULL) && (intf->IsAnyRunningLockHoldingFunc != NULL)) {
         ret = intf->IsAnyRunningLockHoldingFunc((IUnknown *)intf);
     }
     return ret;
+}
+
+void SuspendDevice(SuspendDeviceType reason, BOOL suspendImmed)
+{
+    PowerManageInterface *intf = GetPowerManageInterface();
+    if ((intf != NULL) && (intf->SuspendDeviceFunc != NULL)) {
+        intf->SuspendDeviceFunc((IUnknown *)intf, reason, suspendImmed);
+    }
+}
+
+void WakeupDevice(WakeupDeviceType reason, const char* details)
+{
+    const char* detailReason = (details != NULL) ? details : "No details";
+    PowerManageInterface *intf = GetPowerManageInterface();
+    if ((intf != NULL) && (intf->WakeupDeviceFunc != NULL)) {
+        intf->WakeupDeviceFunc((IUnknown *)intf, reason, detailReason);
+    }
 }

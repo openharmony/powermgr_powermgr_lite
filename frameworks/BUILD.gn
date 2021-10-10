@@ -52,7 +52,7 @@ lite_library("powermgr") {
   public_configs = [ ":powermgr_public_config" ]
 
   deps = [
-    "src/${system_type}:runninglock_impl",
+    "src/${system_type}:powermanage_impl",
     "//foundation/distributedschedule/samgr_lite/samgr:samgr",
   ]
   deps += local_deps

@@ -13,17 +13,24 @@
  * limitations under the License.
  */
 
-#ifndef POWERMGR_RUNNING_LOCK_HANDLER_H
-#define POWERMGR_RUNNING_LOCK_HANDLER_H
+#include "hilog_wrapper.h"
+#include "power/suspend_ops.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
+static BOOL AutoSuspendLoopFunc(AutoSuspendWait waitFunc)
+{
+    POWER_HILOGD("Prepare suspend"); // here to prepare to enter suspend
 
-void RunningLockHandlerLock(const char *name);
-void RunningLockHandlerUnlock(const char *name);
+    // wait callback to check if suspend block counter is ready
+    waitFunc();
 
-#ifdef __cplusplus
+    POWER_HILOGD("Enter suspend");
+    sleep(10); // using sleep to simulate suspend
+
+    POWER_HILOGD("Exit suspend");
+    return TRUE;
 }
-#endif // __cplusplus
-#endif // POWERMGR_RUNNING_LOCK_HANDLER_H
+
+AutoSuspendLoop AutoSuspendLoopInit()
+{
+    return AutoSuspendLoopFunc;
+}
