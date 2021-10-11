@@ -14,9 +14,10 @@
 import("//base/powermgr/powermgr_lite/powermgr.gni")
 import("//build/lite/config/component/lite_component.gni")
 
-static_library("runninglock_featrue_impl") {
+static_library("powermanage_feature_impl") {
   sources = [
-    "running_lock_feature_impl.c",
+    "auto_suspend_loop.c",
+    "power_manage_feature_impl.c",
     "running_lock_handler.c",
   ]
 
@@ -24,6 +25,7 @@ static_library("runninglock_featrue_impl") {
     "${powermgr_frameworks_path}/include",
     "${powermgr_frameworks_path}/include/${system_type}",
     "${powermgr_services_path}/include",
+    "${powermgr_innerkits_path}",
     "${powermgr_kits_path}",
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
     "//kernel/liteos_m/components/power",

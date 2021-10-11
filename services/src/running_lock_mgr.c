@@ -21,8 +21,8 @@
 #include <securec.h>
 
 #include "hilog_wrapper.h"
+#include "power/suspend_controller.h"
 #include "running_lock_entry.h"
-#include "running_lock_handler.h"
 
 static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 static Vector g_runningLocks[RUNNINGLOCK_BUTT];
@@ -67,7 +67,7 @@ static BOOL AddRunningLockEntryLocked(Vector *vec, RunningLockEntry *entry)
     }
     POWER_HILOGD("Add running lock entry, name: %s, type: %d", e->lock.name, e->lock.type);
     if (VECTOR_Num(vec) == 1) {
-        RunningLockHandlerLock(g_runningLockNames[entry->lock.type]);
+        ScAcquireRunningLock(g_runningLockNames[entry->lock.type]);
     }
     return TRUE;
 }
@@ -83,7 +83,7 @@ static BOOL RemoveRunningLockEntryLocked(Vector *vec, RunningLockEntry *entry)
     free(e);
     POWER_HILOGD("Remove running lock entry, name: %s, type: %d", entry->lock.name, entry->lock.type);
     if (VECTOR_Num(vec) == 0) {
-        RunningLockHandlerUnlock(g_runningLockNames[entry->lock.type]);
+        ScReleaseRunningLock(g_runningLockNames[entry->lock.type]);
     }
     return TRUE;
 }
