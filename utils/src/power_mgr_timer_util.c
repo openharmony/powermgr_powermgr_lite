@@ -56,7 +56,7 @@ static BOOL StartTimer(PowerTimer timer, int64_t whenMsec, int64_t intervalMsec)
     SetTimeSpec(&ts.it_interval, intervalMsec);
     int32_t ret = timer_settime(timer, 0, &ts, NULL);
     if (ret < 0) {
-        POWER_HILOGE("Failed to start timer: %s", strerror(errno));
+        POWER_HILOGE("Failed to start timer");
         return FALSE;
     }
     return TRUE;
@@ -94,7 +94,7 @@ PowerTimer *PowerMgrCreateTimer(int64_t whenMsec, int64_t intervalMsec, PowerTim
     evp.sigev_notify_function = TimerHandle;
     int32_t ret = timer_create(CLOCK_REALTIME, &evp, &info->timerId);
     if (ret < 0) {
-        POWER_HILOGE("Failed to create timer: %s", strerror(errno));
+        POWER_HILOGE("Failed to create timer");
         free(info);
         return NULL;
     }
