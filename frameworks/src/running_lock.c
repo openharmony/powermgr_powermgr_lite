@@ -40,7 +40,7 @@ static BOOL AddRunningLock(RunningLock *lock)
     }
     int16_t pos = VECTOR_Add(&g_runningLocks, (void *)lock);
     if (pos == INVALID_INDEX) {
-        POWER_HILOGE("Failed to add lock to vector for lock: %s", lock->name);
+        POWER_HILOGE("Failed to add lock to vector");
         pthread_mutex_unlock(&g_mutex);
         return FALSE;
     }
@@ -54,7 +54,7 @@ static BOOL RemoveRunningLock(const RunningLock *lock)
     pthread_mutex_lock(&g_mutex);
     int16_t pos = VECTOR_Find(&g_runningLocks, (void *)lock);
     if (pos < 0) {
-        POWER_HILOGE("Non-existent running lock: %s", lock->name);
+        POWER_HILOGE("Non-existent running lock");
         pthread_mutex_unlock(&g_mutex);
         return FALSE;
     }
@@ -115,19 +115,19 @@ const RunningLock *CreateRunningLock(const char *name, RunningLockType type, Run
         return NULL;
     }
     AddRunningLock(&entry->lock);
-    POWER_HILOGI("Create %s, pid: %u, token: %llu", name, entry->identity.pid, (long long)entry->identity.token);
+    POWER_HILOGD("Create %s, pid: %u, token: %llu", name, entry->identity.pid, (long long)entry->identity.token);
     return &entry->lock;
 }
 
 BOOL AcquireRunningLock(const RunningLock *lock)
 {
     if (IsRunningLockExisted(lock) == FALSE) {
-        POWER_HILOGE("Non-existent running lock: %s", lock->name);
+        POWER_HILOGE("Non-existent running lock");
         return FALSE;
     }
     RunningLockEntry *entry = GetRunningLockEntry(lock);
     if (entry->status.isHolding == TRUE) {
-        POWER_HILOGI("Already acquired, name: %s", lock->name);
+        POWER_HILOGD("Already acquired, name: %s", lock->name);
         return TRUE;
     }
     entry->status.isHolding = AcquireRunningLockEntry(entry, -1);
@@ -137,12 +137,12 @@ BOOL AcquireRunningLock(const RunningLock *lock)
 BOOL ReleaseRunningLock(const RunningLock *lock)
 {
     if (IsRunningLockExisted(lock) == FALSE) {
-        POWER_HILOGE("Non-existent running lock: %s", lock->name);
+        POWER_HILOGE("Non-existent running lock");
         return FALSE;
     }
     RunningLockEntry *entry = GetRunningLockEntry(lock);
     if (entry->status.isHolding == FALSE) {
-        POWER_HILOGI("Already released, name: %s", lock->name);
+        POWER_HILOGD("Already released, name: %s", lock->name);
         return TRUE;
     }
     entry->status.isHolding = !ReleaseRunningLockEntry(entry);
@@ -164,7 +164,7 @@ void DestroyRunningLock(const RunningLock *lock)
 BOOL IsRunningLockHolding(const RunningLock *lock)
 {
     if (IsRunningLockExisted(lock) == FALSE) {
-        POWER_HILOGE("Non-existent running lock: %s", lock->name);
+        POWER_HILOGE("Non-existent running lock");
         return FALSE;
     }
     RunningLockEntry *entry = GetRunningLockEntry(lock);
