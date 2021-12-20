@@ -158,7 +158,7 @@ uint32_t RunningLockMgrGetTotalLockCount()
     return cnt;
 }
 
-static RunningLockIdentity *GetRunningLockIdentity(const RunningLockEntry *entry)
+static const RunningLockIdentity *GetRunningLockIdentity(const RunningLockEntry *entry)
 {
     return &entry->identity;
 }

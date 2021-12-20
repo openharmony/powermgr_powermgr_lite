@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
+#include <stdio.h>
 #include <stdint.h>
-
+#include <unistd.h>
 #include <pthread.h>
-
 #include "hilog_wrapper.h"
 #include "power/suspend_ops.h"
 
@@ -28,6 +28,7 @@ static pthread_t g_suspendThread;
 static AutoSuspendLoop g_suspendLoop = NULL;
 static uint32_t g_suspendBlockCounter = 0;
 
+int usleep(useconds_t usec);
 static BOOL SuspendConditionSatisfied()
 {
     return (g_suspendBlockCounter == 0) ? TRUE : FALSE;

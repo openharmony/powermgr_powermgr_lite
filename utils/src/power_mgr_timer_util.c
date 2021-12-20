@@ -34,9 +34,6 @@ typedef struct {
     void *data;
 } PowerTimerInfo;
 
-static BOOL g_inited = FALSE;
-static Vector g_timers;
-
 static inline PowerTimerInfo *GetPowerTimerInfo(PowerTimer *timer)
 {
     return GET_OBJECT(timer, PowerTimerInfo, timerId);
