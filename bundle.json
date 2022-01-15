@@ -1,0 +1,80 @@
+{
+  "name": "@ohos/powermgr_powermgr_lite",
+  "version": "",
+  "description": "轻设备电源管理服务。",
+  "homePage": "https://gitee.com/openharmony",
+  "license": "Apache V2",
+  "repository": "https://gitee.com/openharmony/powermgr_powermgr_lite",
+  "domain": "os",
+  "language": "",
+  "publishAs": "",
+  "private": false,
+  "scripts": {},
+  "tags": [
+    "//base/powermgr/powermgr_lite:powermgr_lite"
+  ],
+  "keywords": [
+    "powermgr",
+    "powermgr_lite",
+    "lite"
+  ],
+  "envs": [],
+  "dirs": [
+    "base/powermgr/powermgr_lite"
+  ],
+  "author": {
+    "name": "",
+    "email": "",
+    "url": ""
+  },
+  "contributors": [
+    {
+      "name": "",
+      "email": "",
+      "url": ""
+    }
+  ],
+  "segment": {
+    "destPath": "base/powermgr/powermgr_lite"
+  },
+  "component": {
+    "name": "powermgr_lite",
+    "subsystem": "",
+    "syscap": [
+        "SystemCapability.PowerMgr.PowermgrLite"
+    ],
+    "features": [],
+    "adapted_system_type": [
+      "liteos_a",
+      "liteos_m",
+      "linux"
+    ],
+    "rom": "22KB",
+    "ram": "~10KB",
+    "output": [
+      "libpowermgr.so",
+      "libpowermgrservice.so"
+    ],
+    "deps": {
+      "components": [
+        "utils_base",
+        "samgr_lite",
+        "peripheral_input",
+        "ui",
+        "ipc_lite",
+        "aafwk_lite",
+        "appexecfwk_lite",
+        "hilog",
+        "wms"
+      ],
+      "third_party": [
+        "bounds_checking_function"
+      ]
+    },
+    "build": {
+      "sub_component": [],
+      "inner_kits": [],
+      "test": []
+    }
+  }
+}
