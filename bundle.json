@@ -20,7 +20,7 @@
     "name": "powermgr_lite",
     "subsystem": "powermgr",
     "syscap": [
-        "SystemCapability.PowerMgr.PowermgrLite"
+        "SystemCapability.PowerManager.PowerManagerLite"
     ],
     "features": [],
     "adapted_system_type": [
