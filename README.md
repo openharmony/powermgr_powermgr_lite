@@ -102,7 +102,7 @@ DestroyRunningLock(lock); // Must release runninglock before destroyed
 
 [powermgr_power_manager](https://gitee.com/openharmony/powermgr_power_manager)
 
-[**powermgr_display_manager](https://gitee.com/openharmony/powermgr_display_manager)
+[powermgr_display_manager](https://gitee.com/openharmony/powermgr_display_manager)
 
 [powermgr_battery_manager](https://gitee.com/openharmony/powermgr_battery_manager)
 
@@ -112,5 +112,5 @@ DestroyRunningLock(lock); // Must release runninglock before destroyed
 
 [powermgr_battery_lite](https://gitee.com/openharmony/powermgr_battery_lite)
 
-**powermgr_powermgr_lite**
+[powermgr_powermgr_lite](https://gitee.com/openharmony/powermgr_powermgr_lite)
 
