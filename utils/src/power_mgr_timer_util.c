@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -85,7 +85,7 @@ PowerTimer *PowerMgrCreateTimer(int64_t whenMsec, int64_t intervalMsec, PowerTim
     info->timerCb = cb;
 
     struct sigevent evp;
-    memset_s(&evp, sizeof(evp), 0, sizeof(evp));
+    (void)memset_s(&evp, sizeof(evp), 0, sizeof(evp));
     evp.sigev_value.sival_ptr = info;
     evp.sigev_notify = SIGEV_THREAD;
     evp.sigev_notify_function = TimerHandle;
