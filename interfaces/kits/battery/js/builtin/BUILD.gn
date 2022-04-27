@@ -20,8 +20,8 @@ ohos_static_library("libnativeapi_battery_simulator") {
   include_dirs = [
     "//third_party/bounds_checking_function/include",
     "include",
-    "//foundation/ace/ace_engine_lite/interfaces/innerkits/builtin/jsi",
-    "//foundation/ace/ace_engine_lite/interfaces/innerkits/builtin/base",
+    "//foundation/arkui/ace_engine_lite/interfaces/inner_api/builtin/jsi",
+    "//foundation/arkui/ace_engine_lite/interfaces/inner_api/builtin/base",
   ]
   cflags = [ "-Wno-unused-variable" ]
   deps = []
