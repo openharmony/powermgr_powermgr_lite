@@ -24,8 +24,11 @@ if (is_liteos_m) {
   ]
   local_deps += [ "//kernel/liteos_m/kal/posix:posix" ]
 } else {
+  local_include_dirs +=
+      [ "//foundation/communication/ipc/interfaces/innerkits/c/ipc/include" ]
   local_deps += [
     "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
+    "//foundation/communication/ipc/interfaces/innerkits/c/ipc:ipc_single",
     "//third_party/bounds_checking_function:libsec_shared",
   ]
 }

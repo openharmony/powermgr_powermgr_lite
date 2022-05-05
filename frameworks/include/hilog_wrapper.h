@@ -18,7 +18,11 @@
 
 #define LOG_TAG                 "PowerMgr"
 
-#include <log.h>
+#if defined(__LITEOS_M__)
+#include "log.h"
+#else
+#include "hilog/log.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {

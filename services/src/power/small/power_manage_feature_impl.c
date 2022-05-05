@@ -54,7 +54,7 @@ PowerManageFeature *GetPowerManageFeatureImpl(void)
 
 static int32_t FeatureInvoke(IServerProxy *iProxy, int32_t funcId, void *origin, IpcIo *req, IpcIo *reply)
 {
-    if ((iProxy == NULL) || (origin == NULL) || (req == NULL)) {
+    if ((iProxy == NULL) || (req == NULL)) {
         POWER_HILOGE("Invalid parameter");
         return EC_INVALID;
     }
@@ -65,43 +65,52 @@ static int32_t FeatureInvoke(IServerProxy *iProxy, int32_t funcId, void *origin,
 
 static int32_t AcquireInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
 {
-    size_t len = 0;
-    void *data = (void *)IpcIoPopFlatObj(req, &len);
-    int32_t timeoutMs = IpcIoPopInt32(req);
+    uint32_t len = 0;
+    ReadUint32(req, &len);
+    void *data = (void*)ReadBuffer(req, len);
+    int32_t timeoutMs = 0;
+    ReadInt32(req, &timeoutMs);
     int32_t ret = OnAcquireRunningLockEntry((IUnknown *)iProxy, (RunningLockEntry *)data, timeoutMs);
-    IpcIoPushInt32(reply, ret);
+    WriteInt32(reply, ret);
     return EC_SUCCESS;
 }
 
 static int32_t ReleaseInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
 {
-    size_t len = 0;
-    void *data = (void *)IpcIoPopFlatObj(req, &len);
+    uint32_t len = 0;
+    ReadUint32(req, &len);
+    void *data = (void*)ReadBuffer(req, len);
     int32_t ret = OnReleaseRunningLockEntry((IUnknown *)iProxy, (RunningLockEntry *)data);
-    IpcIoPushInt32(reply, ret);
+    WriteInt32(reply, ret);
     return EC_SUCCESS;
 }
 
 static int32_t IsAnyHoldingInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
 {
     BOOL ret = OnIsAnyRunningLockHolding((IUnknown *)iProxy);
-    IpcIoPushBool(reply, ret == TRUE);
+    WriteBool(reply, ret == TRUE);
     return EC_SUCCESS;
 }
 
 static int32_t SuspendInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
 {
-    SuspendDeviceType reason = (SuspendDeviceType)IpcIoPopInt32(req);
-    BOOL suspendImmed = IpcIoPopBool(req) ? TRUE : FALSE;
+    int32_t ret = 0;
+    ReadInt32(req, &ret);
+    SuspendDeviceType reason = (SuspendDeviceType)ret;
+    bool ret1 = false;
+    ReadBool(req, &ret1);
+    BOOL suspendImmed = ret1 ? TRUE : FALSE;
     OnSuspendDevice((IUnknown *)iProxy, reason, suspendImmed);
     return EC_SUCCESS;
 }
 
 static int32_t WakeupInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, IpcIo *reply)
 {
-    WakeupDeviceType reason = (WakeupDeviceType)IpcIoPopInt32(req);
+    int32_t ret = 0;
+    ReadInt32(req, &ret);
+    WakeupDeviceType reason = (WakeupDeviceType)ret;
     size_t len = 0;
-    const char *details = (const char *)IpcIoPopString(req, &len);
+    const char *details = (const char *)ReadString(req, &len);
     OnWakeupDevice((IUnknown *)iProxy, reason, details);
     return EC_SUCCESS;
 }
