@@ -44,15 +44,16 @@ static int32_t SetStateInvoke(IServerProxy *iProxy, void *origin, IpcIo *req, Ip
         POWER_HILOGE("Invalid parameter");
         return EC_INVALID;
     }
-    bool enable = IpcIoPopBool(req);
+    bool enable = false;
+    ReadBool(req, &enable);
     int32_t ret = OnSetScreenSaverState((IUnknown *)iProxy, enable ? TRUE : FALSE);
-    IpcIoPushInt32(reply, ret);
+    WriteInt32(reply, ret);
     return EC_SUCCESS;
 }
 
 static int32_t FeatureInvoke(IServerProxy *iProxy, int32_t funcId, void *origin, IpcIo *req, IpcIo *reply)
 {
-    if ((iProxy == NULL) || (origin == NULL) || (req == NULL)) {
+    if ((iProxy == NULL) || (req == NULL)) {
         POWER_HILOGE("Invalid parameter");
         return EC_INVALID;
     }

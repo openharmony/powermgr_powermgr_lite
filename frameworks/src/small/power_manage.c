@@ -115,7 +115,7 @@ static int32_t AcquireReleaseCallback(IOwner owner, int32_t code, IpcIo *reply)
     }
 
     int32_t *ret = (int32_t *)owner;
-    *ret = IpcIoPopInt32(reply);
+    ReadInt32(reply, ret);
     POWER_HILOGD("Running lock callback: %d, code: %d", *ret, code);
     return EC_SUCCESS;
 }
@@ -130,12 +130,17 @@ static int32_t AcquireRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry
     IpcIo request;
     char buffer[MAX_DATA_LEN];
     IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
-    IpcIoPushFlatObj(&request, entry, sizeof(RunningLockEntry));
-    IpcIoPushInt32(&request, timeoutMs);
+    bool value = WriteRawData(&request, entry, sizeof(RunningLockEntry));
+    if (!value) {
+        POWER_HILOGE("WriteRawData faild");
+        return EC_INVALID;
+    }
+    WriteInt32(&request, timeoutMs);
 
     int32_t ret;
     PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_ACQUIRERUNNINGLOCK, &request, &ret, AcquireReleaseCallback);
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_ACQUIRERUNNINGLOCK,
+        &request, &ret, AcquireReleaseCallback);
     POWER_HILOGD("Acquire running lock done, name: %s, type: %d", entry->lock.name, entry->lock.type);
 
     return ret;
@@ -151,11 +156,16 @@ static int32_t ReleaseRunningLockEntryProxy(IUnknown *iUnknown, RunningLockEntry
     IpcIo request;
     char buffer[MAX_DATA_LEN];
     IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
-    IpcIoPushFlatObj(&request, entry, sizeof(RunningLockEntry));
+    bool value = WriteRawData(&request, entry, sizeof(RunningLockEntry));
+    if (!value) {
+        POWER_HILOGE("WriteRawData faild");
+        return EC_INVALID;
+    }
 
     int32_t ret;
     PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_RELEASERUNNINGLOCK, &request, &ret, AcquireReleaseCallback);
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_RELEASERUNNINGLOCK,
+        &request, &ret, AcquireReleaseCallback);
     POWER_HILOGD("Release running lock done, name: %s, type: %d", entry->lock.name, entry->lock.type);
 
     return ret;
@@ -169,7 +179,9 @@ static int32_t IsAnyHoldingCallback(IOwner owner, int32_t code, IpcIo *reply)
     }
 
     BOOL *ret = (BOOL *)owner;
-    *ret = IpcIoPopBool(reply) ? TRUE : FALSE;
+    bool readRet;
+    ReadBool(reply, &readRet);
+    *ret = readRet ? TRUE : FALSE;
     POWER_HILOGD("Any running lock holding: %d, code: %d", *ret, code);
     return EC_SUCCESS;
 }
@@ -178,7 +190,11 @@ static BOOL IsAnyRunningLockHoldingProxy(IUnknown *iUnknown)
 {
     BOOL ret;
     PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
-    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_ISANYRUNNINGLOCKHOLDING, NULL, &ret, IsAnyHoldingCallback);
+    IpcIo request;
+    char buffer[MAX_DATA_LEN];
+    IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
+    proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_ISANYRUNNINGLOCKHOLDING,
+        &request, &ret, IsAnyHoldingCallback);
     return ret;
 }
 
@@ -226,8 +242,8 @@ static void SuspendDeviceProxy(IUnknown *iUnknown, SuspendDeviceType reason, BOO
     IpcIo request;
     char buffer[MAX_DATA_LEN];
     IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
-    IpcIoPushInt32(&request, reason);
-    IpcIoPushBool(&request, (suspendImmed == TRUE));
+    WriteInt32(&request, (int32_t)reason);
+    WriteBool(&request, (suspendImmed == TRUE));
 
     PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
     proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_SUSPEND, &request, NULL, NULL);
@@ -239,8 +255,8 @@ static void WakeupDeviceProxy(IUnknown *iUnknown, WakeupDeviceType reason, const
     IpcIo request;
     char buffer[MAX_DATA_LEN];
     IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
-    IpcIoPushInt32(&request, reason);
-    IpcIoPushString(&request, details);
+    WriteInt32(&request, (int32_t)reason);
+    WriteString(&request, details);
 
     PowerManageProxyInterface *proxy = (PowerManageProxyInterface *)iUnknown;
     proxy->Invoke((IClientProxy *)proxy, POWERMANAGE_FUNCID_WAKEUP, &request, NULL, NULL);
