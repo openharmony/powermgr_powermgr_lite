@@ -25,8 +25,15 @@ if (is_liteos_m) {
   ]
   local_deps += [ "//kernel/liteos_m/kal/posix:posix" ]
 } else {
-  local_deps +=
-      [ "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared" ]
+  local_include_dirs += [
+    "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
+    "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
+    "//foundation/communication/ipc/interfaces/innerkits/c/ipc/include",
+  ]
+  local_deps += [
+    "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
+    "//foundation/communication/ipc/interfaces/innerkits/c/ipc:ipc_single",
+  ]
 
   if (enable_screensaver) {
     local_sources += [ "src/screen_saver_feature.c" ]
