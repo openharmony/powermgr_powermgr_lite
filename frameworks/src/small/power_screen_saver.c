@@ -104,7 +104,7 @@ static int32_t Callback(IOwner owner, int32_t code, IpcIo *reply)
     }
 
     int32_t *ret = (int32_t *)owner;
-    *ret = IpcIoPopInt32(reply);
+    ReadInt32(reply, ret);
     POWER_HILOGD("Power screen saver callback: %d, code: %d", *ret, code);
     return EC_SUCCESS;
 }
@@ -114,7 +114,7 @@ static int32_t SetScreenSaverStateProxy(IUnknown *iUnknown, BOOL enable)
     IpcIo request;
     char buffer[MAX_DATA_LEN];
     IpcIoInit(&request, buffer, MAX_DATA_LEN, 0);
-    IpcIoPushBool(&request, enable == TRUE);
+    WriteBool(&request, enable == TRUE);
 
     int32_t ret;
     ScreenSaverProxyInterface *proxy = (ScreenSaverProxyInterface *)iUnknown;
