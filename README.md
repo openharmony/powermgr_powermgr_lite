@@ -24,6 +24,7 @@ The lite power manager provides the following capabilities:
 
 ```
 base/powermgr/powermgr_lite
+├── figures           # Architecture figures
 ├── frameworks        # Frameworks
 │   ├── include       # Header files
 │   └── src           # Source files
