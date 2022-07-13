@@ -24,6 +24,7 @@
 
 ```
 base/powermgr/powermgr_lite
+├── figures           # 架构图
 ├── frameworks        # Framework层
 │   ├── include       # Framework层头文件
 │   └── src           # Framework层源文件
