@@ -27,7 +27,7 @@ source_set("powermanage_impl") {
     "${powermgr_kits_path}",
   ]
 
-  deps = [ "//foundation/distributedschedule/samgr_lite/samgr:samgr" ]
+  deps = [ "//foundation/systemabilitymgr/samgr_lite/samgr:samgr" ]
 }
 
 source_set("screensaver_impl") {
@@ -41,5 +41,5 @@ source_set("screensaver_impl") {
     "${powermgr_frameworks_path}/include/${system_type}",
   ]
 
-  deps = [ "//foundation/distributedschedule/samgr_lite/samgr:samgr" ]
+  deps = [ "//foundation/systemabilitymgr/samgr_lite/samgr:samgr" ]
 }
