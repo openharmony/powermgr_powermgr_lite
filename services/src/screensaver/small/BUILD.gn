@@ -45,7 +45,7 @@ source_set("screensaver_featrue_impl") {
   deps = [
     "${aafwk_lite_path}/frameworks/abilitymgr_lite:abilitymanager",
     "${powermgr_utils_path}:powermgr_utils",
-    "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
     "//foundation/graphic/wms:lite_wms",
+    "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
   ]
 }
