@@ -21,13 +21,13 @@ local_sources = []
 if (is_liteos_m) {
   local_include_dirs += [
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
-    "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
+    "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr",
   ]
   local_deps += [ "//kernel/liteos_m/kal/posix:posix" ]
 } else {
   local_include_dirs += [
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
-    "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
+    "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr",
     "//foundation/communication/ipc/interfaces/innerkits/c/ipc/include",
   ]
   local_deps += [
@@ -66,7 +66,7 @@ lite_library("powermgrservice") {
 
   deps = [
     "src/power/${system_type}:powermanage_feature_impl",
-    "//foundation/distributedschedule/samgr_lite/samgr:samgr",
+    "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
   ]
   deps += local_deps
 }

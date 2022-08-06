@@ -32,5 +32,5 @@ source_set("powermanage_feature_impl") {
     "${powermgr_kits_path}",
   ]
 
-  deps = [ "//foundation/distributedschedule/samgr_lite/samgr:samgr" ]
+  deps = [ "//foundation/systemabilitymgr/samgr_lite/samgr:samgr" ]
 }
