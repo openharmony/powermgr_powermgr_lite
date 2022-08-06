@@ -35,7 +35,7 @@ if (is_liteos_m) {
     ]
 
     deps = [
-      "//foundation/distributedschedule/samgr_lite/samgr:samgr",
+      "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
       "//kernel/liteos_m/kal/posix:posix",
       "//kernel/liteos_m/kernel:kernel",
     ]
@@ -50,6 +50,6 @@ if (is_liteos_m) {
     public_configs = [ ":powermgr_utils_public_config" ]
     include_dirs = [ "${powermgr_frameworks_path}/include" ]
 
-    deps = [ "//foundation/distributedschedule/samgr_lite/samgr:samgr" ]
+    deps = [ "//foundation/systemabilitymgr/samgr_lite/samgr:samgr" ]
   }
 }
