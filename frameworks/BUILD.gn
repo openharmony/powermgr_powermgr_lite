@@ -48,7 +48,7 @@ lite_library("powermgr") {
   include_dirs = [
     "include",
     "include/${system_type}",
-    "//utils/native/lite/include",
+    "//commonlibrary/utils_lite/include",
   ]
   include_dirs += local_include_dirs
 
