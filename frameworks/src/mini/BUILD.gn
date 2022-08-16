@@ -23,7 +23,7 @@ static_library("powermanage_impl") {
     "${powermgr_innerkits_path}",
     "${powermgr_kits_path}",
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
-    "//utils/native/lite/include",
+    "//commonlibrary/utils_lite/include",
   ]
 
   deps = [
@@ -39,6 +39,6 @@ static_library("screensaver_impl") {
     "${powermgr_frameworks_path}/include",
     "${powermgr_frameworks_path}/include/${system_type}",
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
-    "//utils/native/lite/include",
+    "//commonlibrary/utils_lite/include",
   ]
 }

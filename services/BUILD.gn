@@ -60,7 +60,7 @@ lite_library("powermgrservice") {
     "${powermgr_frameworks_path}/include/${system_type}",
     "${powermgr_innerkits_path}",
     "${powermgr_kits_path}",
-    "//utils/native/lite/include",
+    "//commonlibrary/utils_lite/include",
   ]
   include_dirs += local_include_dirs
 
