@@ -26,10 +26,7 @@ static_library("powermanage_impl") {
     "//commonlibrary/utils_lite/include",
   ]
 
-  deps = [
-    "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
-    "//kernel/liteos_m/kal/posix:posix",
-  ]
+  deps = [ "//foundation/systemabilitymgr/samgr_lite/samgr:samgr" ]
 }
 
 static_library("screensaver_impl") {
