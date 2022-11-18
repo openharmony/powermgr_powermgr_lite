@@ -36,7 +36,6 @@ if (is_liteos_m) {
 
     deps = [
       "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
-      "//kernel/liteos_m/kal/posix:posix",
       "//kernel/liteos_m/kernel:kernel",
     ]
   }
