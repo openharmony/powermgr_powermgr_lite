@@ -25,9 +25,6 @@ ohos_static_library("libnativeapi_battery_simulator") {
   ]
   cflags = [ "-Wno-unused-variable" ]
   deps = []
-
-  subsystem_name = "powermgr"
-  part_name = "${powermgr_lite_part_name}"
 }
 
 config("nativeapi_battery_simulator_config") {
