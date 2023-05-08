@@ -15,8 +15,6 @@
 import("//build/lite/config/component/lite_component.gni")
 import("config.gni")
 
-powermgr_lite_part_name = "powermgr_lite"
-
 powermgr_path = "//base/powermgr/powermgr_lite"
 
 powermgr_frameworks_path = "${powermgr_path}/frameworks"
