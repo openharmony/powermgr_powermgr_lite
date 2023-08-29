@@ -16,7 +16,7 @@ import("//build/lite/config/component/lite_component.gni")
 
 source_set("screensaver_featrue_impl") {
   cflags = [ "-fPIC" ]
-  cflags_cc = cflags
+  cflags_cc += cflags
 
   defines = [
     "ENABLE_WINDOW=1",
@@ -46,6 +46,9 @@ source_set("screensaver_featrue_impl") {
     "${aafwk_lite_path}/frameworks/abilitymgr_lite:abilitymanager",
     "${powermgr_utils_path}:powermgr_utils",
     "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
-    "//foundation/window/window_manager_lite:window_manager_lite",
   ]
+
+  if (has_window_manager_lite_part) {
+    deps += [ "//foundation/window/window_manager_lite:window_manager_lite" ]
+  }
 }
