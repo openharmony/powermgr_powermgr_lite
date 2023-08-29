@@ -19,7 +19,9 @@
 #include <mutex>
 
 #include <ability_service_interface.h>
+#ifdef HAS_WINDOW_MANAGER_LITE_PART
 #include <input_event_listener_proxy.h>
+#endif
 
 #include "power_mgr_time_util.h"
 #include "power_mgr_timer_util.h"
