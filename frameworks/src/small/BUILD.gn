@@ -16,7 +16,7 @@ import("//build/lite/config/component/lite_component.gni")
 
 source_set("powermanage_impl") {
   cflags = [ "-fPIC" ]
-  cflags_cc += cflags
+  cflags_cc = cflags
 
   sources = [ "power_manage.c" ]
 
@@ -32,7 +32,7 @@ source_set("powermanage_impl") {
 
 source_set("screensaver_impl") {
   cflags = [ "-fPIC" ]
-  cflags_cc += cflags
+  cflags_cc = cflags
 
   sources = [ "power_screen_saver.c" ]
 
