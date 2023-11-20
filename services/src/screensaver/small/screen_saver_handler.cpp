@@ -130,25 +130,18 @@ bool ScreenSaverHandler::SetEnableLocked()
         POWER_HILOGE("Failed to start timer");
         return false;
     }
-
-#ifdef HAS_WINDOW_MANAGER_LITE_PART
     if (!InputEventListenerProxy::GetInstance()->RegisterInputEventListener(this)) {
         PowerMgrStopTimer(timer_);
         POWER_HILOGE("Failed to register input event listener");
         return false;
     }
-#endif
-
     POWER_HILOGI("Succeed to enable screen saver");
     return true;
 }
 
 bool ScreenSaverHandler::SetDisableLocked()
 {
-#ifdef HAS_WINDOW_MANAGER_LITE_PART
     InputEventListenerProxy::GetInstance()->UnregisterInputEventListener();
-#endif
-
     PowerMgrStopTimer(timer_);
     POWER_HILOGI("Succeed to disable screen saver");
     return true;
