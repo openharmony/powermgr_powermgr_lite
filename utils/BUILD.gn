@@ -42,7 +42,7 @@ if (is_liteos_m) {
 } else {
   source_set("powermgr_utils") {
     cflags = [ "-fPIC" ]
-    cflags_cc += cflags
+    cflags_cc = cflags
 
     sources = utils_sources
 

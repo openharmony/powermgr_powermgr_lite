@@ -16,7 +16,7 @@ import("//build/lite/config/component/lite_component.gni")
 
 source_set("powermanage_feature_impl") {
   cflags = [ "-fPIC" ]
-  cflags_cc += cflags
+  cflags_cc = cflags
 
   sources = [
     "auto_suspend_loop.c",
