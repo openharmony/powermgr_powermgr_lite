@@ -51,7 +51,9 @@
        "//base/powermgr/powermgr_lite:powermgr_lite"
       ],
       "inner_kits": [],
-      "test": []
+      "test": [
+        "//base/powermgr/powermgr_lite/test/Interface_test:unittest"
+      ]
     }
   }
 }
