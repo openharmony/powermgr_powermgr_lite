@@ -25,6 +25,8 @@
 #include "hilog_wrapper.h"
 #include "running_lock_mgr.h"
 
+static int32_t delay_listener = 20;
+
 namespace OHOS {
 ScreenSaverHandler::~ScreenSaverHandler()
 {
@@ -103,7 +105,7 @@ void ScreenSaverHandler::Init()
         timer_ = PowerMgrCreateTimer(intervalMsec_, intervalMsec_, PowerTimerCallback);
     }
     std::thread lateInit([this] {
-        sleep(20); // set delay to avoid registing input evnet listener failure
+        sleep(delay_listener); // set delay to avoid registing input evnet listener failure
         SetState(true);
     });
     lateInit.detach();
