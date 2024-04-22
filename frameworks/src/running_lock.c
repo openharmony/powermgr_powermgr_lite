@@ -87,7 +87,7 @@ static RunningLockEntry *CreateRunningLockEntry(const char *name, RunningLockTyp
     InitIdentity(entry);
     entry->lock.type = type;
     entry->lock.flag = flag;
-    if(strcpy_s(entry->lock.name, sizeof(entry->lock.name), name) != EOK) {
+    if (strcpy_s(entry->lock.name, sizeof(entry->lock.name), name) != EOK) {
         free(entry);
         return NULL;
     }

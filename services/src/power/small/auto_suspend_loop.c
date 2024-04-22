@@ -16,6 +16,8 @@
 #include "hilog_wrapper.h"
 #include "power/suspend_ops.h"
 
+static int32_t g_sleep = 10;
+
 static BOOL AutoSuspendLoopFunc(AutoSuspendWait waitFunc)
 {
     POWER_HILOGD("Prepare suspend"); // here to prepare to enter suspend
@@ -24,7 +26,7 @@ static BOOL AutoSuspendLoopFunc(AutoSuspendWait waitFunc)
     waitFunc();
 
     POWER_HILOGD("Enter suspend");
-    sleep(10); // using sleep to simulate suspend
+    sleep(g_sleep); // using sleep to simulate suspend
 
     POWER_HILOGD("Exit suspend");
     return TRUE;
