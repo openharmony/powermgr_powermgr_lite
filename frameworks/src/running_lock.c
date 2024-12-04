@@ -97,7 +97,7 @@ static RunningLockEntry *CreateRunningLockEntry(const char *name, RunningLockTyp
 static inline void DestroyRunningLockEntry(RunningLockEntry *entry)
 {
     if (entry != NULL) {
-        POWER_HILOGD("Free entry: %p", entry);
+        POWER_HILOGD("Free entry");
         free(entry);
     }
 }
