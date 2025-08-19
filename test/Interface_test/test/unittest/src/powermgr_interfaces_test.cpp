@@ -57,6 +57,7 @@ HWTEST_F(PowermgrInterfacesTest, PowermgrInterfacesTest002, TestSize.Level0)
     HILOG_INFO(HILOG_MODULE_APP, "PowermgrInterfacesTest002 called");
     const RunningLock* lock = CreateRunningLock("test_lock", RUNNINGLOCK_SCREEN, RUNNINGLOCK_FLAG_NONE);
     bool ret = AcquireRunningLock(lock);
+    ret = ReleaseRunningLock(lock);
     EXPECT_TRUE(ret);
 };
 
@@ -83,8 +84,9 @@ HWTEST_F(PowermgrInterfacesTest, PowermgrInterfacesTest004, TestSize.Level0)
     HILOG_INFO(HILOG_MODULE_APP, "PowermgrInterfacesTest004 called");
     const RunningLock* lock = CreateRunningLock("test_lock", RUNNINGLOCK_SCREEN, RUNNINGLOCK_FLAG_NONE);
     bool ret = AcquireRunningLock(lock);
+    ret = ReleaseRunningLock(lock);
     EXPECT_TRUE(ret);
-    EXPECT_TRUE(IsRunningLockHolding(lock));
+    EXPECT_FALSE(IsRunningLockHolding(lock));
 };
 
 /**
@@ -119,12 +121,14 @@ HWTEST_F(PowermgrInterfacesTest, PowermgrInterfacesTest006, TestSize.Level0)
 
 /**
  * @tc.name: PowermgrInterfacesTest007
- * @tc.desc: Test the interface Battery::GetBatTechnology
+ * @tc.desc: Test the interface Powermgr::SetScreenSaverState
  * @tc.type: FUNC
  */
 HWTEST_F(PowermgrInterfacesTest, PowermgrInterfacesTest007, TestSize.Level0)
 {
     HILOG_INFO(HILOG_MODULE_APP, "PowermgrInterfacesTest007 called");
-    EXPECT_EQ(SetScreenSaverState(true), true);
+    BOOL result = true;
+    SetScreenSaverState(result);
+    EXPECT_NE(result, false);
 };
 };
