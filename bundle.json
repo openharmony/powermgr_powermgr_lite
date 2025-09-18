@@ -49,7 +49,18 @@
       "sub_component": [
        "//base/powermgr/powermgr_lite:powermgr_lite"
       ],
-      "inner_kits": [],
+      "inner_kits": [
+        {
+          "name":"//base/powermgr/powermgr_lite/interfaces/kits/battery/js/builtin:libnativeapi_battery_simulator",
+          "header":{
+            "header_files": [
+              "battery_impl.h",
+              "battery_module.h"
+            ],
+            "header_base": "//base/powermgr/powermgr_lite/interfaces/kits/battery/js/builtin/include"
+          }
+        }
+      ],
       "test": [
         "//base/powermgr/powermgr_lite/test/Interface_test:unittest"
       ]
