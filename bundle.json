@@ -19,9 +19,7 @@
   "component": {
     "name": "powermgr_lite",
     "subsystem": "powermgr",
-    "syscap": [
-        "SystemCapability.PowerManager.PowerManager.Lite"
-    ],
+    "syscap": [],
     "features": [],
     "adapted_system_type": [
       "mini",
