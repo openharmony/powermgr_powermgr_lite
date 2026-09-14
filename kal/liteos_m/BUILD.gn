@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2026 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -14,25 +14,16 @@
 import("//base/powermgr/powermgr_lite/powermgr.gni")
 import("//build/lite/config/component/lite_component.gni")
 
-static_library("powermanage_feature_impl") {
-  sources = [
-    "auto_suspend_loop.c",
-    "power_manage_feature_impl.c",
-    "running_lock_handler.c",
-  ]
+static_library("powermgr_kal_impl") {
+  sources = [ "power_pm_kal.c" ]
+
+  public_configs = [ "${powermgr_kal_path}:powermgr_kal_public_config" ]
 
   include_dirs = [
-    "${powermgr_frameworks_path}/include",
-    "${powermgr_frameworks_path}/include/${system_type}",
-    "${powermgr_services_path}/include",
-    "${powermgr_innerkits_path}",
-    "${powermgr_kits_path}",
-    "${powermgr_kal_path}/include",
+    "${powermgr_path}/frameworks/include",
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite",
-  ]
-
-  deps = [
-    "${powermgr_kal_path}:powermgr_kal",
-    "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
+    "//kernel/liteos_m/components/power",
+    "//kernel/liteos_m/kernel/include",
+    "//kernel/liteos_m/utils",
   ]
 }
