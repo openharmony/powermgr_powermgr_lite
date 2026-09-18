@@ -13,23 +13,22 @@
  * limitations under the License.
  */
 
-#include <los_pm.h>
-
 #include "hilog_wrapper.h"
 #include "power/suspend_ops.h"
+#include "power_pm_kal.h"
 
 static BOOL AutoSuspendLoopFunc(AutoSuspendWait waitFunc)
 {
     POWER_HILOGD("Prepare suspend");
-    uint32_t wakeCount = LOS_PmReadLock();
+    uint32_t wakeCount = KalPmReadLock();
     POWER_HILOGI("Lock count: %{public}u", wakeCount);
 
     // wait callback to check if suspend block counter is ready
     waitFunc();
 
     POWER_HILOGD("Enter suspend");
-    uint32_t ret = LOS_PmSuspend(wakeCount);
-    if (ret != LOS_OK) {
+    int32_t ret = KalPmSuspend(wakeCount);
+    if (ret != KAL_PM_SUCCESS) {
         return FALSE;
     }
 

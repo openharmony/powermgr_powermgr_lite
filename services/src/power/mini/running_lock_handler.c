@@ -15,10 +15,9 @@
 
 #include <stdint.h>
 
-#include <los_pm.h>
-
 #include "hilog_wrapper.h"
 #include "power/suspend_ops.h"
+#include "power_pm_kal.h"
 
 static void HandleRunningLock(const char* name, BOOL acquire)
 {
@@ -27,8 +26,8 @@ static void HandleRunningLock(const char* name, BOOL acquire)
         return;
     }
 
-    uint32_t ret = (acquire == TRUE) ? LOS_PmLockRequest(name) : LOS_PmLockRelease(name);
-    POWER_HILOGI("%{public}s runninglock: %{public}s, ret: %{public}u",
+    int32_t ret = (acquire == TRUE) ? KalPmLockRequest(name) : KalPmLockRelease(name);
+    POWER_HILOGI("%{public}s runninglock: %{public}s, ret: %{public}d",
         (acquire == TRUE) ? "Acquire" : "Release", name, ret);
 }
 

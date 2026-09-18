@@ -29,6 +29,8 @@ powermgr_services_path = "${powermgr_path}/services"
 
 powermgr_utils_path = "${powermgr_path}/utils"
 
+powermgr_kal_path = "${powermgr_path}/kal"
+
 declare_args() {
   is_liteos_m = false
   is_liteos_a = false
